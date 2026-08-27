@@ -1,11 +1,10 @@
-package it.uniroma3.siw.moviefestival_backend.model.dto;
+package it.uniroma3.siw.moviefestival_backend.dto;
 
 import java.util.List;
 
 /* questo dto serve per caricare le informazioni nella pagina dettagli film*/
 public record FilmDto(
         Long id,
-        String nome,
         String titolo,
         Integer anno,
         Integer durata,

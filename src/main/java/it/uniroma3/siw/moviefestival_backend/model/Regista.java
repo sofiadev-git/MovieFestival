@@ -60,11 +60,11 @@ public class Regista {
         this.nazionalita = nazionalita;
     }
 
-    public Set<Film> getFilm() {
+    public Set<Film> getFilmDiretti() {
         return filmDiretti;
     }
 
-    public void setFilm(Set<Film> film) {
-        this.filmDiretti = film;
+    public void setFilmDiretti(Set<Film> filmDiretti) {
+        this.filmDiretti = filmDiretti;
     }
 }

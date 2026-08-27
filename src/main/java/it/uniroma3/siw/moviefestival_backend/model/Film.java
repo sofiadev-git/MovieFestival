@@ -1,6 +1,10 @@
 package it.uniroma3.siw.moviefestival_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +16,12 @@ public class Film {
     private Long id;
 
     private String titolo;
+
+    @NotNull
+    @Min(1900)
+    @Max(2030)
     private Integer anno;
+
     private Integer durata;
     private String genere;
     private String paeseProduzione;

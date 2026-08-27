@@ -1,4 +1,4 @@
-package it.uniroma3.siw.moviefestival_backend.model.dto;
+package it.uniroma3.siw.moviefestival_backend.dto;
 
 import java.time.LocalDate;
 import java.util.List;

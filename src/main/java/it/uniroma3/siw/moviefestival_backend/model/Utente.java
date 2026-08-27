@@ -59,4 +59,11 @@ public class Utente {
         this.role = role;
     }
 
+    public Set<Recensione> getRecensione() {
+        return recensione;
+    }
+
+    public void setRecensione(Set<Recensione> recensione) {
+        this.recensione = recensione;
+    }
 }

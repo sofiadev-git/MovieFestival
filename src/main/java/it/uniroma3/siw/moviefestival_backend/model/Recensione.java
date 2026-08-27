@@ -1,11 +1,14 @@
 package it.uniroma3.siw.moviefestival_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "recensione_utente_film", columnNames = {"utente_id", "film_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "recensione_utente_film", columnNames = {"utente_id", "film_id"})}) //permette a un utente di fare una singola recensione per film
 public class Recensione {
 
     @Id
@@ -18,6 +21,9 @@ public class Recensione {
     )
     private String testo;
 
+    @NotNull
+    @Min(1)
+    @Max(5)
     @Column(nullable = false)
     private Integer voto;
 
@@ -25,12 +31,12 @@ public class Recensione {
     private LocalDate data;
 
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "utente_id", nullable = false)
     private Utente autore;
 

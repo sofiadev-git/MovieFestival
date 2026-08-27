@@ -1,6 +1,7 @@
 package it.uniroma3.siw.moviefestival_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,9 +13,10 @@ public class Sala {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank
     private String nome;
     private String indirizzo;
-    private int capienza;
+    private Integer capienza;
 
     @OneToMany(mappedBy = "sala")
     private Set<Proiezione> proiezioni = new HashSet<>();
@@ -45,11 +47,11 @@ public class Sala {
         this.indirizzo = indirizzo;
     }
 
-    public int getCapienza() {
+    public Integer getCapienza() {
         return capienza;
     }
 
-    public void setCapienza(int capienza) {
+    public void setCapienza(Integer capienza) {
         this.capienza = capienza;
     }
 

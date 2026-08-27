@@ -1,6 +1,7 @@
 package it.uniroma3.siw.moviefestival_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,18 +21,20 @@ public class Proiezione {
         CANCELLED,
         COMPLETED
     }
+
+    @NotNull
     @Enumerated(EnumType.STRING) //salva il contenuto dell'enum per usarlo
     private StatoProiezione stato;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "festival_id",nullable = false)
     private Festival festival;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "film_id",nullable = false)
     private Film film;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sala_id")
     private Sala sala;
 

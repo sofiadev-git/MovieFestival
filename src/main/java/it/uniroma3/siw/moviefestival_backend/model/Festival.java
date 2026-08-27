@@ -1,6 +1,10 @@
 package it.uniroma3.siw.moviefestival_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -12,12 +16,27 @@ public class Festival {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @NotBlank
     private String nome;
+
+    @NotNull
+    @Min(1900)
+    @Max(2030)
     private Integer anno;
+
+    @NotBlank
     private String citta;
-    private LocalDate dataInizio; //LocalDate rappresenta una data di calendario senza orario e senza fuso orario, permette di scrivere xx/xx/xxxx
+
+    @NotNull
+    private LocalDate dataInizio;
+
+    @NotNull//LocalDate rappresenta una data di calendario senza orario e senza fuso orario, permette di scrivere xx/xx/xxxx
     private LocalDate dataFine;
+
+    @Column(
+            nullable = false,
+            length = 4000
+    )
     private String descrizione;
 
     @ManyToMany(fetch = FetchType.LAZY) //per ora lazy
