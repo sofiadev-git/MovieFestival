@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Festival</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <a th:href="@{/}"><strong>MovieFestival</strong></a>
+        <div class="nav-links">
+            <a th:if="${userDetails == null}"th:href="@{/login}">Login</a>
+            <a th:if="${userDetails == null}"th:href="@{/register}">Sign up</a>
+            <span th:if="${userDetails != null}"
+                  th:text="${userDetails.username}">
+                username
+            </span>
+            <form th:if="${userDetails != null}" th:action="@{/logout}" method="post">
+                <button type="submit">Logout</button>
+            </form>
+
+        </div>
+    </nav>
+    <main class="container">
+        <div class="space-between">
+            <div>
+                <p class="muted">Catalogo pubblico</p>
+                <h1>Festival</h1>
+            </div>
+        </div>
+        <p th:if="${#lists.isEmpty(festivals)}" class="panel">Non sono ancora presenti festival.</p>
+        <section class="grid" th:unless="${#lists.isEmpty(festivals)}">
+            <article class="card" th:each="festival : ${festivals}">
+                <h2 th:text="${festival.nome}">
+                    Nome Festival
+                </h2>
+                <p>
+                    <strong>Città:</strong>
+                    <span th:text="${festival.citta}"></span>
+                </p>
+                <p>
+                    <strong>Date:</strong>
+                    <span th:text="${#temporals.format(festival.dataInizio, 'dd/MM/yyyy')}"></span>
+                    –
+                    <span th:text="${#temporals.format(festival.dataFine, 'dd/MM/yyyy')}"></span>
+                </p>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registrazione</title><link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar"><a th:href="@{/}"><strong>Movie Festival</strong></a><a th:href="@{/festivals}">Festival</a></nav>
+<main class="container"><section class="panel" style="max-width:520px;margin:auto">
+    <h1>Registrazione</h1>
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+    <form class="form-grid" th:action="@{/register}" method="post">
+        <label>Username<input type="text" name="username" th:value="${username}" required></label>
+        <label>Password<input type="password" name="password" required></label>
+        <label>Conferma password<input type="password" name="confirmPassword" required></label>
+        <button type="submit">Crea account</button>
+    </form>
+</section></main>
+</body>
+</html>

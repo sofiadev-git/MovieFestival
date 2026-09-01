@@ -1,5 +1,6 @@
 package it.uniroma3.siw.moviefestival_backend.service;
 
+import it.uniroma3.siw.moviefestival_backend.exception.NotValidException;
 import it.uniroma3.siw.moviefestival_backend.model.Festival;
 import it.uniroma3.siw.moviefestival_backend.model.Film;
 import it.uniroma3.siw.moviefestival_backend.model.Proiezione;
@@ -109,7 +110,7 @@ public class FestivalService {
         List<Proiezione> proiezioni = proiezioneRepository.findByFestival_IdOrderByDataAscOraAsc(id);
         for (Proiezione p : proiezioni){
             if (p.getData().isAfter(f.getDataFine()) || p.getData().isBefore(f.getDataInizio())){
-                throw new RuntimeException("La data di una o più proiezioni non rientra nelle date del festival");
+                throw new NotValidException("La data di una o più proiezioni non rientra nelle date del festival");
             }
         }
         festival.setNome(f.getNome());
@@ -130,7 +131,7 @@ public class FestivalService {
         Film film = filmRepository.findById(id).orElseThrow(()-> new RuntimeException("film non trovato"));
         //se il film ce già (anche se un film nel festival non dovrebbe risultare nella lista di film da poter aggiungere)
         if (!f.getFilmPartecipanti().add(film)) {
-            throw new RuntimeException("Il film partecipa già a questo festival");
+            throw new NotValidException("Il film partecipa già a questo festival");
         }
         //aggiungi il festival nella lista dei festival a cui partecipa
         //la relazione opposta viene fatta nell'if
@@ -146,7 +147,7 @@ public class FestivalService {
         Film film = filmRepository.findById(id).orElseThrow(()-> new RuntimeException("film non trovato"));
 
         if (!f.getFilmPartecipanti().contains(film)) { //controllo per sicurezza
-            throw new RuntimeException("Il film non partecipa a questo festival");
+            throw new NotValidException("Il film non partecipa a questo festival");
         }
 
         //elimina anche le relative proiezioni
@@ -164,7 +165,7 @@ public class FestivalService {
         if(festival.getDataInizio()!=null &&
                 festival.getDataFine()!=null &&
                 festival.getDataFine().isBefore(festival.getDataInizio())) {
-        throw new RuntimeException("Le date inserite non sono valide"); //temporaneo
+        throw new NotValidException("Le date inserite non sono valide"); //temporaneo
         }
     }
 }
