@@ -25,6 +25,11 @@ public class FestivalController {
 
         return "paginaListaFestival";
     }
+    //per gestire la zona dell'admin
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
 
 
     //serve per mostrare o meno contenuti (es bottoni) in base a se un utente è autenticato o meno

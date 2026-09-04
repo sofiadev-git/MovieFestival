@@ -1,5 +1,6 @@
 package it.uniroma3.siw.moviefestival_backend.service;
 
+import it.uniroma3.siw.moviefestival_backend.exception.NotFoundException;
 import it.uniroma3.siw.moviefestival_backend.exception.NotValidException;
 import it.uniroma3.siw.moviefestival_backend.model.Festival;
 import it.uniroma3.siw.moviefestival_backend.model.Film;
@@ -35,11 +36,21 @@ public class FestivalService {
         return festivalRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    public List<Film> getFilmPartecipanti(Long festivalId){
+        return filmRepository.findByFestival_idOrderByTitoloAsc(festivalId);
+    }
+
+    @Transactional(readOnly = true)
+    public Festival getFestival(Long id){
+        return festivalRepository.findById(id).orElseThrow(()-> new NotFoundException("festival non trovato"));
+    }
+
     //per i casi 2-3-4, facciamo visualizzazione festival, film e proiezioni insieme
     @Transactional(readOnly = true)
     public FestivalDetailsDto getFestivalDetails(Long festivalId){
 
-        Festival festival = festivalRepository.findById(festivalId).orElseThrow(() -> new RuntimeException("Festival non trovato"));
+        Festival festival = festivalRepository.findById(festivalId).orElseThrow(() -> new NotFoundException("Festival non trovato"));
         /*registriamo il festival che ci interessa
         * findById(id) restituisce un optional, che permette di lanciare un eccezione se il valore non esiste
         * al momento usiamo RuntimeException*/
@@ -104,7 +115,7 @@ public class FestivalService {
     //modifica
     @Transactional
     public Festival updateFestival(Long id, Festival f){ //passo id e i nuovi dati
-        Festival festival = festivalRepository.findById(id).orElseThrow(()->new RuntimeException("Festival non trovato"));
+        Festival festival = festivalRepository.findById(id).orElseThrow(()->new NotFoundException("Festival non trovato"));
         controllaDate(f);
         //riprendo le proiezioni e controllo che, se sono cambiate, le date siano coerenti
         List<Proiezione> proiezioni = proiezioneRepository.findByFestival_IdOrderByDataAscOraAsc(id);
@@ -127,8 +138,8 @@ public class FestivalService {
         //aggiunta di un film a un festival (non creazione film)
     @Transactional
     public void addFilmToFestival(Long festivalId, Long id){
-        Festival f = festivalRepository.findById(festivalId).orElseThrow(()->new RuntimeException("Festival non trovato"));
-        Film film = filmRepository.findById(id).orElseThrow(()-> new RuntimeException("film non trovato"));
+        Festival f = festivalRepository.findById(festivalId).orElseThrow(()->new NotFoundException("Festival non trovato"));
+        Film film = filmRepository.findById(id).orElseThrow(()-> new NotFoundException("film non trovato"));
         //se il film ce già (anche se un film nel festival non dovrebbe risultare nella lista di film da poter aggiungere)
         if (!f.getFilmPartecipanti().add(film)) {
             throw new NotValidException("Il film partecipa già a questo festival");
@@ -143,8 +154,8 @@ public class FestivalService {
     //elimina film da un festival (non elimina film): soffisfa il requisito elimina film dal festival (con relative proiezioni)
     @Transactional
     public void removeFilmFromFestival(Long festivalId, Long id){
-        Festival f = festivalRepository.findById(festivalId).orElseThrow(()->new RuntimeException("Festival non trovato"));
-        Film film = filmRepository.findById(id).orElseThrow(()-> new RuntimeException("film non trovato"));
+        Festival f = festivalRepository.findById(festivalId).orElseThrow(()->new NotFoundException("Festival non trovato"));
+        Film film = filmRepository.findById(id).orElseThrow(()-> new NotFoundException("film non trovato"));
 
         if (!f.getFilmPartecipanti().contains(film)) { //controllo per sicurezza
             throw new NotValidException("Il film non partecipa a questo festival");

@@ -10,6 +10,7 @@
     <nav class="navbar">
         <a th:href="@{/}"><strong>MovieFestival</strong></a>
         <div class="nav-links">
+            <a th:href="@{/admin}">Area Admin</a>
             <a th:if="${userDetails == null}"th:href="@{/login}">Login</a>
             <a th:if="${userDetails == null}"th:href="@{/register}">Sign up</a>
             <span th:if="${userDetails != null}"

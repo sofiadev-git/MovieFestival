@@ -22,7 +22,7 @@ public class UtenteController {
 
     @GetMapping("/register")
     public String registerPage() {
-        return "register";
+        return "signUp";
     }
 
     @PostMapping("/register")
@@ -31,8 +31,8 @@ public class UtenteController {
         if (!password.equals(confirmPassword)) {
             model.addAttribute("error", "Le password non coincidono");// addAttribute fa si che la pagina possa leggere questo attributo e mostrare il messaggio
             model.addAttribute("username", username);
-            return "register";
-            //Torno a register.html, ma insieme alla pagina gli passo anche il messaggio di errore e lo username che l’utente aveva già inserito
+            return "signUp";
+            //Torno a signUp.html, ma insieme alla pagina gli passo anche il messaggio di errore e lo username che l’utente aveva già inserito
         }
 
         try {
@@ -41,7 +41,7 @@ public class UtenteController {
         } catch (NotValidException exception) { // se dal service arriva un eccezione
             model.addAttribute("error", exception.getMessage());
             model.addAttribute("username", username);
-            return "register";
+            return "signUp";
         }
     }
 }

@@ -1,6 +1,7 @@
 package it.uniroma3.siw.moviefestival_backend.service;
 
 
+import it.uniroma3.siw.moviefestival_backend.exception.NotFoundException;
 import it.uniroma3.siw.moviefestival_backend.exception.NotValidException;
 import it.uniroma3.siw.moviefestival_backend.model.Utente;
 import it.uniroma3.siw.moviefestival_backend.repository.UtenteRepository;
@@ -23,7 +24,7 @@ public class UtenteService {
     }
     @Transactional(readOnly = true)
     public Utente findUtenteByUsername(String username){
-        return utenteRepository.findUtenteByUsername(username).orElseThrow(()-> new RuntimeException("username non trovato"));
+        return utenteRepository.findUtenteByUsername(username).orElseThrow(()-> new NotFoundException("username non trovato"));
     }
 
     //per il login ci pensa il securityConfig con UserDetailsService e la parte dedicata al login

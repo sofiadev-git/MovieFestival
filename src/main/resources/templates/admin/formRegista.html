@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title th:text="${modifica} ? 'Modifica regista' : 'Nuovo regista'">
+        Regista
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+
+<body>
+
+<nav class="navbar">
+
+    <a th:href="@{/static}">
+        <strong>Movie Festival</strong>
+    </a>
+
+    <a th:href="@{/admin/registi}">
+        Registi
+    </a>
+
+</nav>
+
+
+<main class="container">
+
+    <section class="panel">
+
+        <h1 th:text="${modifica} ? 'Modifica regista' : 'Nuovo regista'">
+            Regista
+        </h1>
+
+
+        <form class="admin-form"
+              th:object="${regista}"
+              th:action="${modifica}
+            ? @{/admin/registi/{id}(id=${regista.id})}
+            : @{/admin/registi}"
+              method="post">
+
+
+            <div class="form-field">
+
+                <label for="nome">
+                    Nome
+                </label>
+
+                <input
+                        id="nome"
+                        type="text"
+                        th:field="*{nome}"
+                        required>
+
+            </div>
+
+
+            <div class="form-field">
+
+                <label for="cognome">
+                    Cognome
+                </label>
+
+                <input
+                        id="cognome"
+                        type="text"
+                        th:field="*{cognome}"
+                        required>
+
+            </div>
+
+
+            <div class="form-field">
+
+                <label for="nazionalita">
+                    Nazionalità
+                </label>
+
+                <input
+                        id="nazionalita"
+                        type="text"
+                        th:field="*{nazionalita}"
+                        required>
+
+            </div>
+
+
+            <div class="form-field">
+
+                <label for="dataNascita">
+                    Data di nascita
+                </label>
+
+                <input
+                        id="dataNascita"
+                        type="date"
+                        th:field="*{dataNascita}"
+                        min="1800-01-01"
+                        required>
+
+            </div>
+
+
+            <button type="submit"
+                    th:text="${modifica} ? 'Salva modifiche' : 'Crea regista'">
+
+                Salva
+
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

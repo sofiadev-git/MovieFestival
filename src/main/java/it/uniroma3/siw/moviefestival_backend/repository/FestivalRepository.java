@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository // non serve specificarlo con Jpa tecnicamente
 public interface FestivalRepository extends JpaRepository<Festival,Long> {
+
+
 }

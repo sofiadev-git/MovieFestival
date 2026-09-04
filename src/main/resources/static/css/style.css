@@ -95,3 +95,75 @@ th { background: #f0f4fa; }
     .form-grid.two, .film-layout { grid-template-columns: 1fr; }
     .poster { width: 150px; }
 }
+
+.registi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.regista-card {
+    background: white;
+    border: 1px solid #dfe5ee;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+}
+
+.regista-card h2 {
+    margin-top: 0;
+    margin-bottom: 22px;
+}
+
+.regista-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.regista-info p {
+    margin: 0;
+}
+
+.regista-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.regista-actions form {
+    margin: 0;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    max-width: 600px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-field label {
+    font-weight: 600;
+}
+
+.form-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #ccd5e0;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.admin-form button {
+    align-self: flex-start;
+    margin-top: 8px;
+}

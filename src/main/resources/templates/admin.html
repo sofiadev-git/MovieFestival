@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Area Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a th:href="@{/}">
+        <strong>Movie Festival</strong>
+    </a>
+
+    <a th:href="@{/admin}">Area Admin</a>
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+
+<main class="container">
+
+    <h1>Area Admin</h1>
+
+    <section class="panel">
+
+        <h2>Gestione dati</h2>
+
+        <p>
+            <a th:href="@{/admin/festivals}">
+                Tutti i festival
+            </a>
+        </p>
+
+        <p>
+            <a th:href="@{/admin/registi}">
+                Tutti i registi
+            </a>
+        </p>
+
+
+    </section>
+
+</main>
+
+</body>
+</html>
