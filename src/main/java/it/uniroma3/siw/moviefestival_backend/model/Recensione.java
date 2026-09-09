@@ -3,45 +3,43 @@ package it.uniroma3.siw.moviefestival_backend.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "recensione_utente_film", columnNames = {"utente_id", "film_id"})}) //permette a un utente di fare una singola recensione per film
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "recensione_utente_film", columnNames = {"utente_id", "film_id"})
+})
 public class Recensione {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(
-            nullable = false,
-            length = 4000
-    )
+    @NotBlank
+    @Size(max = 500)
+    @Column(nullable = false, length = 500)
     private String testo;
 
     @NotNull
-    @Min(1)
-    @Max(5)
+    @Min(value = 1)
+    @Max(value = 5)
     @Column(nullable = false)
     private Integer voto;
 
     @Column(nullable = false)
     private LocalDate data;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "utente_id", nullable = false)
     private Utente autore;
-
-    /* GETTER E SETTER*/
-
 
     public Long getId() {
         return id;

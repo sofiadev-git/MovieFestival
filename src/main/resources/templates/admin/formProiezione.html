@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title th:text="${modifica}
+            ? 'Modifica proiezione'
+            : 'Nuova proiezione'">
+        Proiezione
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+</head>
+
+
+<body class="festival-page">
+
+
+<nav class="navbar">
+
+    <a class="navbar-brand"
+       th:href="@{/}">
+        Movie Festival
+    </a>
+
+    <div class="nav-links">
+
+        <a th:href="@{/festivals}">
+            Festival
+        </a>
+
+        <a th:href="@{/films}">
+            Film
+        </a>
+
+        <a th:href="@{/registi}">
+            Registi
+        </a>
+
+        <a th:href="@{/admin}">
+            Area Admin
+        </a>
+
+        <form th:action="@{/logout}"
+              method="post">
+
+            <button class="nav-button"
+                    type="submit">
+                Logout
+            </button>
+
+        </form>
+
+    </div>
+
+</nav>
+
+
+<main class="form-page form-page-wide">
+
+
+    <section class="form-card">
+
+
+        <header class="form-heading">
+
+            <p class="section-kicker">
+                PROGRAMMA FESTIVAL
+            </p>
+
+            <h1 th:text="${modifica}
+                    ? 'Modifica proiezione'
+                    : 'Nuova proiezione'">
+                Proiezione
+            </h1>
+
+            <p th:text="${festival.nome}">
+                Nome festival
+            </p>
+
+        </header>
+
+
+        <!-- NESSUNA SALA -->
+
+        <div class="empty-state-dark"
+             th:if="${#lists.isEmpty(sale)}">
+
+            <h2>
+                Nessuna sala disponibile
+            </h2>
+
+            <p>
+                Prima di creare una proiezione devi aggiungere
+                almeno una sala dall'Area Admin.
+            </p>
+
+            <div class="form-actions">
+
+                <a class="button secondary"
+                   th:href="@{/admin/sale}">
+                    Gestisci sale
+                </a>
+
+                <a class="button accent"
+                   th:href="@{/admin/sale/nuova}">
+                    + Nuova sala
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form class="admin-form"
+              th:unless="${#lists.isEmpty(sale)}"
+              th:object="${proiezione}"
+
+              th:action="${modifica}
+                    ? @{/admin/festivals/{festivalId}/proiezioni/{id}(
+                        festivalId=${festival.id},
+                        id=${proiezione.id}
+                      )}
+                    : @{/admin/festivals/{festivalId}/films/{filmId}/proiezioni(
+                        festivalId=${festival.id},
+                        filmId=${film.id}
+                      )}"
+
+              method="post">
+
+
+            <div class="form-grid two">
+
+
+                <!-- FILM -->
+
+                <div class="form-field">
+
+                    <label for="film">
+                        Film
+                    </label>
+
+                    <input id="film"
+                           type="text"
+                           th:value="${film.titolo}"
+                           readonly>
+
+                </div>
+
+
+                <!-- SALA -->
+
+                <div class="form-field">
+
+                    <label for="salaId">
+                        Sala
+                    </label>
+
+                    <select id="salaId"
+                            name="salaId"
+                            required>
+
+                        <option value="">
+                            Seleziona una sala
+                        </option>
+
+                        <option th:each="sala : ${sale}"
+                                th:value="${sala.id}"
+                                th:text="|${sala.nome} - ${sala.indirizzo}|"
+                                th:selected="${modifica
+                                    and proiezione.sala != null
+                                    and sala.id == proiezione.sala.id}">
+
+                            Sala
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DATA -->
+
+                <div class="form-field">
+
+                    <label for="data">
+                        Data
+                    </label>
+
+                    <input id="data"
+                           type="date"
+                           th:field="*{data}"
+                           required>
+
+                </div>
+
+
+                <!-- ORA -->
+
+                <div class="form-field">
+
+                    <label for="ora">
+                        Ora
+                    </label>
+
+                    <input id="ora"
+                           type="time"
+                           th:field="*{ora}"
+                           required>
+
+                </div>
+
+
+                <!-- STATO SOLO IN MODIFICA -->
+
+                <div class="form-field"
+                     th:if="${modifica}">
+
+                    <label for="stato">
+                        Stato
+                    </label>
+
+                    <select id="stato"
+                            th:field="*{stato}"
+                            required>
+
+                        <option value="SCHEDULED">
+                            Programmata
+                        </option>
+
+                        <option value="CANCELLED">
+                            Annullata
+                        </option>
+
+                        <option value="COMPLETED">
+                            Completata
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <a class="button outline"
+                   th:href="@{/admin/festivals/{festivalId}/proiezioni(
+                        festivalId=${festival.id}
+                   )}">
+                    Annulla
+                </a>
+
+
+                <button class="button accent"
+                        type="submit"
+                        th:text="${modifica}
+                            ? 'Salva modifiche'
+                            : 'Aggiungi proiezione'">
+
+                    Salva
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Film - Movie Festival</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="festival-page">
+
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+
+    <div class="nav-links">
+        <a th:href="@{/festivals}">Festival</a>
+        <span class="nav-current">Film</span>
+        <a th:href="@{/registi}">Registi</a>
+        <a th:if="${isAdmin}" th:href="@{/admin}">Area Admin</a>
+
+        <a th:if="${userDetails == null}" th:href="@{/login}">Login</a>
+        <a th:if="${userDetails == null}" class="nav-register" th:href="@{/register}">Sign up</a>
+
+        <span class="nav-user"
+              th:if="${userDetails != null}"
+              th:text="${userDetails.username}">username</span>
+
+        <form th:if="${userDetails != null}" th:action="@{/logout}" method="post">
+            <button class="nav-button" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="site-container">
+    <header class="section-header">
+        <div>
+            <p class="section-kicker">CATALOGO</p>
+            <h1>FILM</h1>
+        </div>
+        <a class="button accent"
+           th:if="${isAdmin}"
+           th:href="@{/admin/films/nuovo}">+ Aggiungi film</a>
+    </header>
+
+    <section class="empty-state-dark" th:if="${#lists.isEmpty(films)}">
+        <h2>Nessun film presente</h2>
+        <p>Non sono ancora presenti film nel catalogo.</p>
+    </section>
+
+    <section class="movie-grid" th:unless="${#lists.isEmpty(films)}">
+        <article class="movie-tile" th:each="film : ${films}">
+            <a class="movie-poster-link" th:href="@{/films/{id}(id=${film.id})}">
+                <img class="movie-poster"
+                     th:if="${film.locandina != null and !film.locandina.isBlank()}"
+                     th:src="${film.locandina}"
+                     th:alt="|Locandina di ${film.titolo}|">
+
+                <div class="movie-poster movie-poster-empty"
+                     th:if="${film.locandina == null or film.locandina.isBlank()}">
+                    Nessuna locandina
+                </div>
+            </a>
+
+            <div class="movie-info">
+                <a class="movie-title-link" th:href="@{/films/{id}(id=${film.id})}">
+                    <h2 th:text="${film.titolo}">Titolo film</h2>
+                </a>
+
+                <p class="movie-meta">
+                    <span th:if="${film.genere != null and !film.genere.isBlank()}" th:text="${film.genere}">Genere</span>
+                    <span th:if="${film.anno != null}" th:text="${film.anno}">2026</span>
+                    <span th:if="${film.durata != null}" th:text="|${film.durata} min|">120 min</span>
+                </p>
+
+                <p class="movie-director" th:if="${film.regista != null}">
+                    <span>Regia</span>
+                    <a class="director-link"
+                       th:href="@{/registi/{id}(id=${film.regista.id})}"
+                       th:text="|${film.regista.nome} ${film.regista.cognome}|">Mario Rossi</a>
+                </p>
+
+                <div class="movie-admin-actions" th:if="${isAdmin}">
+                    <a class="action-link" th:href="@{/admin/films/{id}/edit(id=${film.id})}">Modifica</a>
+                    <form th:action="@{/admin/films/{id}/delete(id=${film.id})}" method="post">
+                        <button class="action-link danger-link" type="submit">Elimina</button>
+                    </form>
+                </div>
+            </div>
+        </article>
+    </section>
+</main>
+
+</body>
+</html>

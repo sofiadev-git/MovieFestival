@@ -5,7 +5,14 @@
     <title>Registrazione</title><link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<nav class="navbar"><a th:href="@{/}"><strong>Movie Festival</strong></a><a th:href="@{/festivals}">Festival</a></nav>
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+    <div class="nav-links">
+        <a th:href="@{/festivals}">Festival</a>
+        <a th:href="@{/films}">Film</a>
+        <a th:href="@{/registi}">Registi</a>
+    </div>
+</nav>
 <main class="container"><section class="panel" style="max-width:520px;margin:auto">
     <h1>Registrazione</h1>
     <p class="error" th:if="${error}" th:text="${error}"></p>

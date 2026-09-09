@@ -1,47 +1,237 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Area Admin</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <title>
+        Area Admin - Movie Festival
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
 </head>
 
-<body>
+
+<body class="festival-page">
+
 
 <nav class="navbar">
-    <a th:href="@{/}">
-        <strong>Movie Festival</strong>
+
+    <a class="navbar-brand"
+       th:href="@{/}">
+        Movie Festival
     </a>
 
-    <a th:href="@{/admin}">Area Admin</a>
-    <a th:href="@{/logout}">Logout</a>
+
+    <div class="nav-links">
+
+        <a th:href="@{/festivals}">
+            Festival
+        </a>
+
+        <a th:href="@{/films}">
+            Film
+        </a>
+
+        <a th:href="@{/registi}">
+            Registi
+        </a>
+
+        <span class="nav-current">
+            Area Admin
+        </span>
+
+
+        <span class="nav-user"
+              th:if="${userDetails != null}"
+              th:text="${userDetails.username}">
+            username
+        </span>
+
+
+        <form th:action="@{/logout}"
+              method="post">
+
+            <button class="nav-button"
+                    type="submit">
+                Logout
+            </button>
+
+        </form>
+
+    </div>
+
 </nav>
 
-<main class="container">
 
-    <h1>Area Admin</h1>
+<main class="site-container">
 
-    <section class="panel">
 
-        <h2>Gestione dati</h2>
+    <header class="section-header">
 
-        <p>
-            <a th:href="@{/admin/festivals}">
-                Tutti i festival
-            </a>
-        </p>
+        <div>
 
-        <p>
-            <a th:href="@{/admin/registi}">
-                Tutti i registi
-            </a>
-        </p>
+            <p class="section-kicker">
+                AREA AMMINISTRATORE
+            </p>
+
+            <h1>
+                GESTIONE CONTENUTI
+            </h1>
+
+        </div>
+
+    </header>
+
+
+    <section class="admin-dashboard">
+
+
+        <!-- FESTIVAL -->
+
+        <article class="admin-card">
+
+            <span class="admin-card-number">
+                01
+            </span>
+
+            <h2>
+                Festival
+            </h2>
+
+            <p>
+                Consulta il catalogo pubblico oppure
+                crea un nuovo festival.
+            </p>
+
+            <div class="admin-card-actions">
+
+                <a class="button secondary"
+                   th:href="@{/festivals}">
+                    Visualizza festival
+                </a>
+
+                <a class="button accent"
+                   th:href="@{/admin/festivals/nuovo}">
+                    + Nuovo festival
+                </a>
+
+            </div>
+
+        </article>
+
+
+        <!-- FILM -->
+
+        <article class="admin-card">
+
+            <span class="admin-card-number">
+                02
+            </span>
+
+            <h2>
+                Film
+            </h2>
+
+            <p>
+                Consulta i film pubblici oppure
+                aggiungi un nuovo film al catalogo.
+            </p>
+
+            <div class="admin-card-actions">
+
+                <a class="button secondary"
+                   th:href="@{/films}">
+                    Visualizza film
+                </a>
+
+                <a class="button accent"
+                   th:href="@{/admin/films/nuovo}">
+                    + Nuovo film
+                </a>
+
+            </div>
+
+        </article>
+
+
+        <!-- REGISTI -->
+
+        <article class="admin-card">
+
+            <span class="admin-card-number">
+                03
+            </span>
+
+            <h2>
+                Registi
+            </h2>
+
+            <p>
+                Consulta le pagine pubbliche dei registi
+                oppure aggiungine uno.
+            </p>
+
+            <div class="admin-card-actions">
+
+                <a class="button secondary"
+                   th:href="@{/registi}">
+                    Visualizza registi
+                </a>
+
+                <a class="button accent"
+                   th:href="@{/admin/registi/nuovo}">
+                    + Nuovo regista
+                </a>
+
+            </div>
+
+        </article>
+
+
+        <!-- SALE -->
+
+        <article class="admin-card">
+
+            <span class="admin-card-number">
+                04
+            </span>
+
+            <h2>
+                Sale
+            </h2>
+
+            <p>
+                Gestisci le sale utilizzate
+                per le proiezioni dei festival.
+            </p>
+
+            <div class="admin-card-actions">
+
+                <a class="button secondary"
+                   th:href="@{/admin/sale}">
+                    Visualizza sale
+                </a>
+
+                <a class="button accent"
+                   th:href="@{/admin/sale/nuova}">
+                    + Nuova sala
+                </a>
+
+            </div>
+
+        </article>
 
 
     </section>
 
 </main>
 
+
 </body>
+
 </html>

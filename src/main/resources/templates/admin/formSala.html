@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${modifica} ? 'Modifica Sala' : 'Nuova Sala'"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="festival-page">
+<nav>
+    <a class="navbar-brand" th:href="@{/}"> Movie Festival</a>
+    <div class="nav-links">
+        <a th:href="@{/festivals}">Festival</a>
+        <a th:href="@{/films}"film>Film</a>
+        <a th:href="@{/registi}">Registi</a>
+        <a th:href="@{/admin}">Area admin</a>
+        <span class="nav-user" th:if="${userDetails !=null}"
+              th:text="${userDetails.username}">
+            username
+        </span>
+        <form th:action="@{/logout}" method="post">
+            <button class="nav-button" type="submit">
+                Logout
+            </button>
+        </form>
+    </div>
+</nav>
+<main class="form-page">
+    <section class="form-card">
+        <header class="form-heading">
+            <p class="section-kicker">AREA AMMINISTRATORE</p>
+            <h1 th:text="${modifica} ? 'Modifica Sala' : 'Nuova Sala'">Sala</h1>
+        </header>
+        <p class="error" th:if="${error}">Errore</p>
+        <form class="admin-form"
+              th:object="${sala}"
+              th:action="${modifica} ? @{/admin/sale/{id}(id=${sala.id})} : @{/admin/sale}"
+              method="post">
+            <div class="form-grid two">
+                <div class="form-field">
+                    <label for="nome">Nome</label>
+                    <input id="nome" type="text" th:field="*{nome}" required>
+                </div>
+                <div class="form-field">
+                    <label for="indirizzo">Indirizzo</label>
+                    <input id="indirizzo" type="text" th:field="*{indirizzo}" required>
+                </div>
+                <div class="form-field">
+                    <label for="capienza">Capienza</label>
+                    <input id="capienza" type="number" th:field="*{capienza}"min="1" required>
+                </div>
+            </div>
+            <div class="form-actions">
+                <a class="button outline" th:href="@{/admin/sale}">
+                    Annulla
+                </a>
+                <button class="button accent" type="submit" th:text="salva">
+                    salva
+                </button>
+
+            </div>
+
+        </form>
+    </section>
+</main>
+</body>
+</html>

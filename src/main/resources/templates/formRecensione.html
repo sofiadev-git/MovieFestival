@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${modifica} ? 'Modifica recensione' : 'Nuova recensione'">Recensione</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="festival-page">
+
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+    <div class="nav-links">
+        <a th:href="@{/festivals}">Festival</a>
+        <a th:href="@{/films}">Film</a>
+        <a th:href="@{/registi}">Registi</a>
+
+        <span class="nav-user"
+              th:if="${userDetails != null}"
+              th:text="${userDetails.username}">username</span>
+
+        <form th:if="${userDetails != null}" th:action="@{/logout}" method="post">
+            <button class="nav-button" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="container">
+    <section class="panel">
+        <p class="section-kicker">RECENSIONE</p>
+
+        <h1 th:text="${modifica} ? 'Modifica recensione' : 'Scrivi una recensione'">
+            Recensione
+        </h1>
+
+        <p class="muted">
+            Film: <strong th:text="${film.titolo}">Titolo film</strong>
+        </p>
+
+        <form class="admin-form"
+              th:object="${recensione}"
+              th:action="${modifica}
+                    ? @{/recensioni/{id}(id=${recensione.id})}
+                    : @{/films/{filmId}/recensioni(filmId=${film.id})}"
+              method="post">
+
+            <div class="form-field">
+                <label for="voto">Voto</label>
+                <select id="voto" th:field="*{voto}" required>
+                    <option value="">Seleziona un voto</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <span class="error"
+                      th:if="${#fields.hasErrors('voto')}"
+                      th:errors="*{voto}">Errore voto</span>
+            </div>
+
+            <div class="form-field">
+                <label for="testo">Testo</label>
+                <textarea id="testo"
+                          th:field="*{testo}"
+                          rows="8"
+                          maxlength="500"
+                          required></textarea>
+
+                <span class="error"
+                      th:if="${#fields.hasErrors('testo')}"
+                      th:errors="*{testo}">Errore testo</span>
+            </div>
+
+            <div class="form-actions">
+                <a class="button outline" th:href="@{/films/{id}(id=${film.id})}">Annulla</a>
+                <button class="button accent"
+                        type="submit"
+                        th:text="${modifica} ? 'Salva modifiche' : 'Pubblica recensione'">
+                    Pubblica recensione
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+
+</body>
+</html>

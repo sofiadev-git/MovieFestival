@@ -42,6 +42,15 @@ public class FestivalService {
     }
 
     @Transactional(readOnly = true)
+    public List<Film> getFilmDisponibili(Long festivalId){
+        Festival festival = getFestival(festivalId);
+        return filmRepository.findAll().stream()
+                .filter(film -> festival.getFilmPartecipanti().stream()
+                        .noneMatch(partecipante -> partecipante.getId().equals(film.getId())))
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public Festival getFestival(Long id){
         return festivalRepository.findById(id).orElseThrow(()-> new NotFoundException("festival non trovato"));
     }
@@ -52,8 +61,8 @@ public class FestivalService {
 
         Festival festival = festivalRepository.findById(festivalId).orElseThrow(() -> new NotFoundException("Festival non trovato"));
         /*registriamo il festival che ci interessa
-        * findById(id) restituisce un optional, che permette di lanciare un eccezione se il valore non esiste
-        * al momento usiamo RuntimeException*/
+         * findById(id) restituisce un optional, che permette di lanciare un eccezione se il valore non esiste
+         * al momento usiamo RuntimeException*/
 
         List<Film> film = filmRepository.findByFestival_idOrderByTitoloAsc(festivalId);
 
@@ -109,6 +118,7 @@ public class FestivalService {
     public Festival createFestival(Festival festival){
         //non serve new festival perché spring crea in automatico l'oggetto dal form
         controllaDate(festival);
+        festival.setAnno(festival.getDataInizio().getYear());
         return festivalRepository.save(festival);
     }
 
@@ -125,7 +135,7 @@ public class FestivalService {
             }
         }
         festival.setNome(f.getNome());
-        festival.setAnno(f.getAnno());
+        festival.setAnno(f.getDataInizio().getYear());
         festival.setCitta(f.getCitta());
         festival.setDataInizio(f.getDataInizio());
         festival.setDataFine(f.getDataFine());
@@ -135,7 +145,7 @@ public class FestivalService {
         return festivalRepository.save(festival);
     }
 
-        //aggiunta di un film a un festival (non creazione film)
+    //aggiunta di un film a un festival (non creazione film)
     @Transactional
     public void addFilmToFestival(Long festivalId, Long id){
         Festival f = festivalRepository.findById(festivalId).orElseThrow(()->new NotFoundException("Festival non trovato"));
@@ -170,13 +180,19 @@ public class FestivalService {
         festivalRepository.save(f);
     }
 
+    @Transactional
+    public void deleteFestival(Long id){
+        Festival festival = festivalRepository.findById(id).orElseThrow(() -> new NotFoundException("Festival non trovato"));
+        List<Proiezione> proiezioni = proiezioneRepository.findByFestival_IdOrderByDataAscOraAsc(id);
+        proiezioneRepository.deleteAll(proiezioni);
+        festivalRepository.delete(festival);
+    }
+
 
     /*{non necessario} controlla che la data d'inizio non sia successiva a quella finale*/
     public void controllaDate(Festival festival){
-        if(festival.getDataInizio()!=null &&
-                festival.getDataFine()!=null &&
-                festival.getDataFine().isBefore(festival.getDataInizio())) {
-        throw new NotValidException("Le date inserite non sono valide"); //temporaneo
+        if(festival.getDataInizio()!=null && festival.getDataFine()!=null && festival.getDataFine().isBefore(festival.getDataInizio())) {
+            throw new NotValidException("Le date inserite non sono valide"); //temporaneo
         }
     }
 }

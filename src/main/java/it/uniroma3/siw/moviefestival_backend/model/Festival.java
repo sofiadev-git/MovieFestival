@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -28,9 +29,11 @@ public class Festival {
     private String citta;
 
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataInizio;
 
     @NotNull//LocalDate rappresenta una data di calendario senza orario e senza fuso orario, permette di scrivere xx/xx/xxxx
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataFine;
 
     @Column(

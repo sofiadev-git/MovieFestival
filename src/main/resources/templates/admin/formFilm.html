@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title th:text="${modifica} ? 'Modifica film' : 'Nuovo film'">
+        Film
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+    <div class="nav-links">
+        <a th:href="@{/festivals}">Festival</a>
+        <a th:href="@{/films}">Film</a>
+        <a th:href="@{/registi}">Registi</a>
+        <a th:href="@{/admin}">Area Admin</a>
+        <form th:action="@{/logout}" method="post">
+            <button class="nav-button" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="panel">
+
+        <h1 th:text="${modifica} ? 'Modifica film' : 'Nuovo film'">
+            Film
+        </h1>
+
+        <form class="admin-form"
+              th:object="${film}"
+              th:action="${modifica}
+                    ? @{/admin/films/{id}(id=${film.id})}
+                    : @{/admin/films}"
+              method="post">
+
+            <div class="form-field">
+                <label for="titolo">Titolo</label>
+                <input id="titolo"
+                       type="text"
+                       th:field="*{titolo}"
+                       required>
+            </div>
+
+            <div class="form-field">
+                <label for="anno">Anno</label>
+                <input id="anno"
+                       type="number"
+                       th:field="*{anno}"
+                       min="1900"
+                       max="2030"
+                       required>
+            </div>
+
+            <div class="form-field">
+                <label for="durata">Durata (minuti)</label>
+                <input id="durata"
+                       type="number"
+                       th:field="*{durata}"
+                       min="1">
+            </div>
+
+            <div class="form-field">
+                <label for="genere">Genere</label>
+                <input id="genere"
+                       type="text"
+                       th:field="*{genere}">
+            </div>
+
+            <div class="form-field">
+                <label for="paeseProduzione">Paese di produzione</label>
+                <input id="paeseProduzione"
+                       type="text"
+                       th:field="*{paeseProduzione}">
+            </div>
+
+            <div class="form-field">
+                <label for="registaId">Regista</label>
+                <select id="registaId"
+                        name="registaId"
+                        required>
+                    <option value="">Seleziona un regista</option>
+
+                    <option th:each="regista : ${registi}"
+                            th:value="${regista.id}"
+                            th:text="|${regista.nome} ${regista.cognome}|"
+                            th:selected="${film.regista != null and film.regista.id == regista.id}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <span class="form-label">Locandina</span>
+
+                <p class="muted" th:if="${#lists.isEmpty(locandine)}">
+                    Non ci sono locandine PNG nella cartella
+                    <strong>static/images/locandine</strong>.
+                </p>
+
+                <div class="locandine-grid" th:unless="${#lists.isEmpty(locandine)}">
+
+                    <label class="locandina-scelta locandina-nessuna">
+                        <input type="radio"
+                               th:field="*{locandina}"
+                               value="">
+                        <span>Nessuna locandina</span>
+                    </label>
+
+                    <label class="locandina-scelta"
+                           th:each="locandina : ${locandine}">
+
+                        <input type="radio"
+                               th:field="*{locandina}"
+                               th:value="${locandina}">
+
+                        <img th:src="${locandina}"
+                             th:alt="${locandina}">
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a class="button outline" th:href="@{/films}">Annulla</a>
+                <button class="button accent" type="submit"
+                        th:text="${modifica} ? 'Salva modifiche' : 'Crea film'">
+                    Salva
+                </button>
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+</html>

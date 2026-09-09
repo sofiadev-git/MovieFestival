@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sale - Movie Festival</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="festival-page">
+
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+    <div class="nav-links">
+        <a th:href="@{/festivals}">Festival</a>
+        <a th:href="@{/films}">Film</a>
+        <a th:href="@{/registi}">Registi</a>
+        <a th:href="@{/admin}">Area Admin</a>
+        <span class="nav-user"
+              th:if="${userDetails != null}"
+              th:text="${userDetails.username}">username</span>
+        <form th:action="@{/logout}" method="post">
+            <button class="nav-button" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="site-container">
+    <header class="section-header">
+        <div>
+            <p class="section-kicker">AREA AMMINISTRATORE</p>
+            <h1>SALE</h1>
+        </div>
+        <a class="button accent" th:href="@{/admin/sale/nuova}">+ Aggiungi sala</a>
+    </header>
+
+    <p class="error" th:if="${error}" th:text="${error}">Errore</p>
+
+    <section class="empty-state-dark" th:if="${#lists.isEmpty(sale)}">
+        <h2>Nessuna sala presente</h2>
+        <p>Aggiungi una sala per poterla utilizzare nelle proiezioni dei festival.</p>
+    </section>
+
+    <section class="entity-grid" th:unless="${#lists.isEmpty(sale)}">
+        <article class="entity-card" th:each="sala : ${sale}">
+            <div class="entity-card-main">
+                <div class="entity-card-header">
+                    <div>
+                        <h2 th:text="${sala.nome}">Sala 1</h2>
+                        <span class="muted" th:text="${sala.indirizzo}">Indirizzo</span>
+                    </div>
+                </div>
+
+                <dl class="details-list">
+                    <div>
+                        <dt>Capienza</dt>
+                        <dd th:text="|${sala.capienza} posti|">100 posti</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="card-actions">
+                <a class="button secondary" th:href="@{/admin/sale/{id}/edit(id=${sala.id})}">Modifica</a>
+                <form th:action="@{/admin/sale/{id}/delete(id=${sala.id})}" method="post">
+                    <button class="button danger" type="submit">Elimina</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>
+
+</body>
+</html>

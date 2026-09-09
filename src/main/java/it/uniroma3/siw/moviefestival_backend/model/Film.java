@@ -3,6 +3,7 @@ package it.uniroma3.siw.moviefestival_backend.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 
@@ -15,6 +16,8 @@ public class Film {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "il titolo è obbligatorio")
+    @Column(nullable = false)
     private String titolo;
 
     @NotNull
@@ -22,9 +25,19 @@ public class Film {
     @Max(2030)
     private Integer anno;
 
+    @NotNull
+    @Min(20)
+    @Max(300)
     private Integer durata;
+
+    @NotBlank(message = "il genere è obbligatorio")
+    @Column(nullable = false)
     private String genere;
+
+    @NotBlank(message = "il paese è obbligatorio")
+    @Column(nullable = false)
     private String paeseProduzione;
+
     private String locandina; //da vedere, da usare poi MultiPartFile per l'upload
 
     public Set<Festival> getFestival() {

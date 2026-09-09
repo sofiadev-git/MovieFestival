@@ -42,7 +42,19 @@ public class SecurityConfiguration {
     protected SecurityFilterChain configure(final HttpSecurity httpSecurity) throws Exception{
 
         httpSecurity.authorizeHttpRequests(authorize->{
-            authorize.requestMatchers(HttpMethod.GET, "/","/festivals","/register","/festivals/**","/api/festivals/**", "/css/**", "/images/**", "/favicon.ico").permitAll();
+            authorize.requestMatchers(HttpMethod.GET,"/films/*/recensioni/nuova").authenticated();
+            authorize.requestMatchers(HttpMethod.GET, "/",
+                    "/festivals",
+                    "/festivals/**",
+                    "/films",
+                    "/films/**",
+                    "/registi",
+                    "/registi/**",
+                    "/register",
+                    "/api/festivals/**",
+                    "/css/**",
+                    "/images/**",
+                    "/favicon.ico").permitAll();
             authorize.requestMatchers(HttpMethod.POST, "/register", "/login").permitAll();
             authorize.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE);
             authorize.requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE);

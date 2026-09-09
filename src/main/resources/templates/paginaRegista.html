@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|${regista.nome} ${regista.cognome} - Movie Festival|">Regista - Movie Festival</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="festival-page">
+
+<nav class="navbar">
+    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+    <div class="nav-links">
+        <a th:href="@{/festivals}">Festival</a>
+        <a th:href="@{/films}">Film</a>
+        <a th:href="@{/registi}">Registi</a>
+        <a th:if="${isAdmin}" th:href="@{/admin}">Area Admin</a>
+
+        <a th:if="${userDetails == null}" th:href="@{/login}">Login</a>
+        <a th:if="${userDetails == null}" class="nav-register" th:href="@{/register}">Sign up</a>
+
+        <span class="nav-user"
+              th:if="${userDetails != null}"
+              th:text="${userDetails.username}">username</span>
+
+        <form th:if="${userDetails != null}" th:action="@{/logout}" method="post">
+            <button class="nav-button" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="site-container">
+    <section class="director-detail-card">
+        <div class="director-detail-heading">
+            <div class="avatar director-avatar"
+                 th:text="|${#strings.substring(regista.nome,0,1)}${#strings.substring(regista.cognome,0,1)}|">MR</div>
+            <div>
+                <p class="section-kicker">REGISTA</p>
+                <h1 th:text="|${regista.nome} ${regista.cognome}|">Mario Rossi</h1>
+            </div>
+        </div>
+
+        <div class="director-details">
+            <div class="detail-field">
+                <span class="detail-label">DATA DI NASCITA</span>
+                <span class="detail-value"
+                      th:text="${#temporals.format(regista.dataNascita, 'dd/MM/yyyy')}">01/01/1980</span>
+            </div>
+            <div class="detail-field">
+                <span class="detail-label">NAZIONALITÀ</span>
+                <span class="detail-value" th:text="${regista.nazionalita}">Italiana</span>
+            </div>
+        </div>
+
+        <div class="film-detail-actions">
+            <a class="button outline" th:href="@{/registi}">Torna ai registi</a>
+            <a class="button accent"
+               th:if="${isAdmin}"
+               th:href="@{/admin/registi/{id}/edit(id=${regista.id})}">Modifica regista</a>
+            <form th:if="${isAdmin}"
+                  th:action="@{/admin/registi/{id}/delete(id=${regista.id})}"
+                  method="post">
+                <button class="button danger" type="submit">Elimina regista</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="director-films-section">
+        <header class="section-header">
+            <div>
+                <p class="section-kicker">FILMOGRAFIA</p>
+                <h2>FILM DIRETTI</h2>
+            </div>
+        </header>
+
+        <div class="empty-state-dark" th:if="${regista.filmDiretti == null or regista.filmDiretti.isEmpty()}">
+            <h2>Nessun film associato</h2>
+            <p>Non risultano ancora film diretti da questo regista.</p>
+        </div>
+
+        <div class="movie-grid" th:unless="${regista.filmDiretti == null or regista.filmDiretti.isEmpty()}">
+            <article class="movie-tile" th:each="film : ${regista.filmDiretti}">
+                <a class="movie-poster-link" th:href="@{/films/{id}(id=${film.id})}">
+                    <img class="movie-poster"
+                         th:if="${film.locandina != null and !film.locandina.isBlank()}"
+                         th:src="${film.locandina}"
+                         th:alt="|Locandina di ${film.titolo}|">
+                    <div class="movie-poster movie-poster-empty"
+                         th:if="${film.locandina == null or film.locandina.isBlank()}">
+                        Nessuna locandina
+                    </div>
+                </a>
+                <div class="movie-info">
+                    <a class="movie-title-link" th:href="@{/films/{id}(id=${film.id})}">
+                        <h2 th:text="${film.titolo}">Titolo film</h2>
+                    </a>
+                    <p class="movie-meta">
+                        <span th:if="${film.genere != null and !film.genere.isBlank()}" th:text="${film.genere}">Genere</span>
+                        <span th:if="${film.anno != null}" th:text="${film.anno}">2026</span>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

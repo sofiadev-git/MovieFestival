@@ -2,8 +2,7 @@
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${modifica} ? 'Modifica regista' : 'Nuovo regista'">Regista</title>
+    <title th:text="${modifica} ? 'Modifica festival' : 'Nuovo festival'">Festival</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="festival-page">
@@ -21,20 +20,20 @@
     </div>
 </nav>
 
-<main class="form-page">
+<main class="form-page form-page-wide">
     <section class="form-card">
         <header class="form-heading">
             <p class="section-kicker">AREA AMMINISTRATORE</p>
-            <h1 th:text="${modifica} ? 'Modifica regista' : 'Nuovo regista'">Regista</h1>
+            <h1 th:text="${modifica} ? 'Modifica festival' : 'Nuovo festival'">Festival</h1>
         </header>
 
         <p class="error" th:if="${error}" th:text="${error}">Errore</p>
 
         <form class="admin-form"
-              th:object="${regista}"
+              th:object="${festival}"
               th:action="${modifica}
-                    ? @{/admin/registi/{id}(id=${regista.id})}
-                    : @{/admin/registi}"
+                    ? @{/admin/festivals/{id}(id=${festival.id})}
+                    : @{/admin/festivals}"
               method="post">
 
             <div class="form-grid two">
@@ -43,26 +42,33 @@
                     <input id="nome" type="text" th:field="*{nome}" required>
                 </div>
 
+
                 <div class="form-field">
-                    <label for="cognome">Cognome</label>
-                    <input id="cognome" type="text" th:field="*{cognome}" required>
+                    <label for="citta">Città</label>
+                    <input id="citta" type="text" th:field="*{citta}" required>
                 </div>
 
                 <div class="form-field">
-                    <label for="nazionalita">Nazionalità</label>
-                    <input id="nazionalita" type="text" th:field="*{nazionalita}" required>
+                    <label for="dataInizio">Data di inizio</label>
+                    <input id="dataInizio" type="date" th:field="*{dataInizio}" required>
                 </div>
 
                 <div class="form-field">
-                    <label for="dataNascita">Data di nascita</label>
-                    <input id="dataNascita" type="date" th:field="*{dataNascita}" min="1800-01-01" required>
+                    <label for="dataFine">Data di fine</label>
+                    <input id="dataFine" type="date" th:field="*{dataFine}" required>
                 </div>
             </div>
 
+            <div class="form-field">
+                <label for="descrizione">Descrizione</label>
+                <textarea id="descrizione" th:field="*{descrizione}" maxlength="4000" required></textarea>
+            </div>
+
             <div class="form-actions">
-                <a class="button outline" th:href="@{/registi}">Annulla</a>
-                <button class="button accent" type="submit"
-                        th:text="${modifica} ? 'Salva modifiche' : 'Crea regista'">Salva</button>
+                <a class="button outline" th:href="@{/festivals}">Annulla</a>
+                <button class="button accent"
+                        type="submit"
+                        th:text="${modifica} ? 'Salva modifiche' : 'Crea festival'">Salva</button>
             </div>
         </form>
     </section>

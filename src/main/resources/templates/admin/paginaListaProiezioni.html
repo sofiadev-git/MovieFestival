@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Programma Festival - Movie Festival</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+</head>
+
+<body class="festival-page">
+
+<nav class="navbar">
+
+    <a class="navbar-brand"
+       th:href="@{/}">
+        Movie Festival
+    </a>
+
+    <div class="nav-links">
+
+        <a th:href="@{/festivals}">
+            Festival
+        </a>
+
+        <a th:href="@{/films}">
+            Film
+        </a>
+
+        <a th:href="@{/registi}">
+            Registi
+        </a>
+
+        <a th:href="@{/admin}">
+            Area Admin
+        </a>
+
+        <form th:action="@{/logout}"
+              method="post">
+
+            <button class="nav-button"
+                    type="submit">
+                Logout
+            </button>
+
+        </form>
+
+    </div>
+
+</nav>
+
+
+<main class="site-container">
+
+    <header class="section-header">
+
+        <div>
+
+            <p class="section-kicker">
+                PROGRAMMA FESTIVAL
+            </p>
+
+            <h1 th:text="${festival.nome}">
+                Festival
+            </h1>
+
+            <p>
+
+                <span th:text="${#temporals.format(
+                        festival.dataInizio,
+                        'dd/MM/yyyy'
+                )}">
+                    01/09/2026
+                </span>
+
+                <span> – </span>
+
+                <span th:text="${#temporals.format(
+                        festival.dataFine,
+                        'dd/MM/yyyy'
+                )}">
+                    05/09/2026
+                </span>
+
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- AGGIUNTA FILM AL FESTIVAL -->
+
+    <section class="form-card">
+
+        <header class="form-heading">
+
+            <p class="section-kicker">
+                FILM PARTECIPANTI
+            </p>
+
+            <h2>
+                Aggiungi un film
+            </h2>
+
+        </header>
+
+
+        <form th:if="${!#lists.isEmpty(filmDisponibili)}"
+              th:action="@{/admin/festivals/{festivalId}/films(
+                    festivalId=${festival.id}
+              )}"
+              method="post">
+
+            <div class="form-field">
+
+                <label for="filmId">
+                    Film
+                </label>
+
+                <select id="filmId"
+                        name="filmId"
+                        required>
+
+                    <option value="">
+                        Seleziona un film
+                    </option>
+
+                    <option th:each="film : ${filmDisponibili}"
+                            th:value="${film.id}"
+                            th:text="${film.titolo}">
+                        Film
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button class="button accent"
+                        type="submit">
+                    Aggiungi film
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <p class="muted"
+           th:if="${#lists.isEmpty(filmDisponibili)}">
+
+            Non ci sono altri film disponibili da aggiungere.
+
+        </p>
+
+    </section>
+
+
+    <!-- NESSUN FILM -->
+
+    <section class="empty-state-dark"
+             th:if="${#lists.isEmpty(films)}">
+
+        <h2>
+            Nessun film associato al festival
+        </h2>
+
+        <p>
+            Aggiungi almeno un film per poter creare il programma.
+        </p>
+
+    </section>
+
+
+    <!-- FILM E RELATIVE PROIEZIONI -->
+
+    <section class="entity-grid"
+             th:unless="${#lists.isEmpty(films)}">
+
+        <article class="entity-card"
+                 th:each="film : ${films}">
+
+            <div class="entity-card-main">
+
+                <div class="entity-card-header">
+
+                    <div>
+
+                        <h2 th:text="${film.titolo}">
+                            Film
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROIEZIONI DI QUESTO FILM -->
+
+                <div th:each="proiezione : ${proiezioni}"
+                     th:if="${proiezione.film.id == film.id}">
+
+                    <dl class="details-list">
+
+                        <div>
+
+                            <dt>
+                                Data
+                            </dt>
+
+                            <dd th:text="${#temporals.format(
+                                    proiezione.data,
+                                    'dd/MM/yyyy'
+                            )}">
+                                01/09/2026
+                            </dd>
+
+                        </div>
+
+
+                        <div>
+
+                            <dt>
+                                Ora
+                            </dt>
+
+                            <dd th:text="${#temporals.format(
+                                    proiezione.ora,
+                                    'HH:mm'
+                            )}">
+                                20:30
+                            </dd>
+
+                        </div>
+
+
+                        <div>
+
+                            <dt>
+                                Sala
+                            </dt>
+
+                            <dd th:text="${proiezione.sala.nome}">
+                                Sala
+                            </dd>
+
+                        </div>
+
+
+                        <div>
+
+                            <dt>
+                                Stato
+                            </dt>
+
+                            <dd th:text="${proiezione.stato}">
+                                SCHEDULED
+                            </dd>
+
+                        </div>
+
+                    </dl>
+
+
+                    <div class="card-actions">
+
+                        <a class="button secondary compact"
+                           th:href="@{/admin/festivals/{festivalId}/proiezioni/{id}/edit(
+                                festivalId=${festival.id},
+                                id=${proiezione.id}
+                           )}">
+                            Modifica
+                        </a>
+
+
+                        <form th:action="@{/admin/festivals/{festivalId}/proiezioni/{id}/delete(
+                                festivalId=${festival.id},
+                                id=${proiezione.id}
+                              )}"
+                              method="post">
+
+                            <button class="button danger compact"
+                                    type="submit">
+                                Elimina
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AZIONI DEL FILM -->
+
+            <div class="card-actions">
+
+                <a class="button accent"
+                   th:href="@{/admin/festivals/{festivalId}/films/{filmId}/proiezioni/nuova(
+                        festivalId=${festival.id},
+                        filmId=${film.id}
+                   )}">
+                    + Proiezione
+                </a>
+
+
+                <form th:action="@{/admin/festivals/{festivalId}/films/{filmId}/delete(
+                        festivalId=${festival.id},
+                        filmId=${film.id}
+                      )}"
+                      method="post">
+
+                    <button class="button danger"
+                            type="submit">
+                        Rimuovi film
+                    </button>
+
+                </form>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <div class="form-actions">
+
+        <a class="button outline"
+           th:href="@{/festivals}">
+            Torna ai festival
+        </a>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

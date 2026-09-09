@@ -2,6 +2,7 @@ package it.uniroma3.siw.moviefestival_backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,6 +13,7 @@ public class Proiezione {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate data;
 
     private LocalTime ora;

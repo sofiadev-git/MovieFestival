@@ -1,6 +1,9 @@
 package it.uniroma3.siw.moviefestival_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -12,9 +15,21 @@ public class Regista {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "il nome è obbligatorio")
+    @Column(nullable = false)
     private String nome;
+
+    @NotBlank(message = "il cognome è obbligatorio")
+    @Column(nullable = false)
     private String cognome;
+
+    @NotNull(message = "la data di nascita è obbligatoria")
+    @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascita;
+
+    @NotBlank(message = "la nazionalità è obbligatoria")
+    @Column(nullable = false)
     private String nazionalita;
 
     @OneToMany(mappedBy = "regista")
