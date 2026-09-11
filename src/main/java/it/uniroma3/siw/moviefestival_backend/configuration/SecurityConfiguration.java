@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                     "/register",
                     "/api/festivals/**",
                     "/css/**",
+                    "/uploads/**",
                     "/images/**",
                     "/favicon.ico").permitAll();
             authorize.requestMatchers(HttpMethod.POST, "/register", "/login").permitAll();

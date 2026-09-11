@@ -38,12 +38,12 @@ public class RegistaService {
         regista.getFilmDiretti().size();
         return regista;
     }
-
+    @Transactional
     public Regista createRegista(Regista regista){
         controllaData(regista);
         return registaRepository.save(regista);
     }
-
+    @Transactional
     public Regista updateRegista(Long id, Regista r){
         Regista regista = getRegista(id);
         controllaData(r);
@@ -53,7 +53,7 @@ public class RegistaService {
         regista.setNazionalita(r.getNazionalita());
         return  registaRepository.save(regista);
     }
-
+    @Transactional
     public void deleteRegista(Long id){
         Regista regista = getRegista(id);
         registaRepository.delete(regista);

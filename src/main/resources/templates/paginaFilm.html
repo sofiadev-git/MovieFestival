@@ -5,32 +5,61 @@
     <title th:text="|${film.titolo} - Movie Festival|">Film - Movie Festival</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body class="festival-page">
 
 <nav class="navbar">
     <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+
     <div class="nav-links">
         <a th:href="@{/festivals}">Festival</a>
         <a th:href="@{/films}">Film</a>
         <a th:href="@{/registi}">Registi</a>
-        <a th:if="${isAdmin}" th:href="@{/admin}">Area Admin</a>
 
-        <a th:if="${userDetails == null}" th:href="@{/login}">Login</a>
-        <a th:if="${userDetails == null}" class="nav-register" th:href="@{/register}">Sign up</a>
+        <a th:if="${isAdmin}"
+           th:href="@{/admin}">
+            Area Admin
+        </a>
+
+        <a th:if="${userDetails == null}"
+           th:href="@{/login}">
+            Login
+        </a>
+
+        <a th:if="${userDetails == null}"
+           class="nav-register"
+           th:href="@{/register}">
+            Sign up
+        </a>
 
         <span class="nav-user"
               th:if="${userDetails != null}"
-              th:text="${userDetails.username}">username</span>
+              th:text="${userDetails.username}">
+            username
+        </span>
 
-        <form th:if="${userDetails != null}" th:action="@{/logout}" method="post">
-            <button class="nav-button" type="submit">Logout</button>
+        <form th:if="${userDetails != null}"
+              th:action="@{/logout}"
+              method="post">
+
+            <button class="nav-button"
+                    type="submit">
+                Logout
+            </button>
+
         </form>
     </div>
 </nav>
 
+
 <main class="film-detail-shell">
+
+    <!-- DETTAGLIO FILM -->
+
     <section class="film-detail">
+
         <div class="film-detail-poster-column">
+
             <img class="film-detail-poster"
                  th:if="${film.locandina != null and !film.locandina.isBlank()}"
                  th:src="${film.locandina}"
@@ -40,68 +69,396 @@
                  th:if="${film.locandina == null or film.locandina.isBlank()}">
                 Nessuna locandina
             </div>
+
         </div>
 
+
         <div class="film-detail-main">
+
             <p class="section-kicker">FILM</p>
-            <h1 class="film-detail-title" th:text="${film.titolo}">Titolo film</h1>
+
+            <h1 class="film-detail-title"
+                th:text="${film.titolo}">
+                Titolo film
+            </h1>
+
 
             <div class="film-detail-summary">
+
                 <p th:if="${film.regista != null}">
-                    <span class="detail-label">REGISTA</span>
+
+                    <span class="detail-label">
+                        REGISTA
+                    </span>
+
                     <a class="detail-value detail-link"
                        th:href="@{/registi/{id}(id=${film.regista.id})}"
-                       th:text="|${film.regista.nome} ${film.regista.cognome}|">Mario Rossi</a>
+                       th:text="|${film.regista.nome} ${film.regista.cognome}|">
+                        Mario Rossi
+                    </a>
+
                 </p>
+
 
                 <p th:if="${film.paeseProduzione != null and !film.paeseProduzione.isBlank()}">
-                    <span class="detail-label">PAESE DI PRODUZIONE</span>
-                    <span class="detail-value" th:text="${film.paeseProduzione}">Italia</span>
+
+                    <span class="detail-label">
+                        PAESE DI PRODUZIONE
+                    </span>
+
+                    <span class="detail-value"
+                          th:text="${film.paeseProduzione}">
+                        Italia
+                    </span>
+
                 </p>
+
             </div>
 
+
             <div class="film-detail-actions">
-                <a class="button outline" th:href="@{/films}">Torna ai film</a>
+
+                <a class="button outline"
+                   th:href="@{/films}">
+                    Torna ai film
+                </a>
+
+
                 <a class="button accent"
                    th:if="${isAdmin}"
-                   th:href="@{/admin/films/{id}/edit(id=${film.id})}">Modifica film</a>
+                   th:href="@{/admin/films/{id}/edit(id=${film.id})}">
+                    Modifica film
+                </a>
+
+
                 <form th:if="${isAdmin}"
                       th:action="@{/admin/films/{id}/delete(id=${film.id})}"
                       method="post">
-                    <button class="button danger" type="submit">Elimina film</button>
+
+                    <button class="button danger"
+                            type="submit">
+                        Elimina film
+                    </button>
+
                 </form>
+
             </div>
+
         </div>
 
+
         <aside class="film-detail-specs">
-            <div class="detail-field" th:if="${film.durata != null}">
-                <span class="detail-label">DURATA</span>
-                <span class="detail-value" th:text="|${film.durata} min|">120 min</span>
+
+            <div class="detail-field"
+                 th:if="${film.durata != null}">
+
+                <span class="detail-label">
+                    DURATA
+                </span>
+
+                <span class="detail-value"
+                      th:text="|${film.durata} min|">
+                    120 min
+                </span>
+
             </div>
 
-            <div class="detail-field" th:if="${film.anno != null}">
-                <span class="detail-label">ANNO</span>
-                <span class="detail-value" th:text="${film.anno}">2026</span>
+
+            <div class="detail-field"
+                 th:if="${film.anno != null}">
+
+                <span class="detail-label">
+                    ANNO
+                </span>
+
+                <span class="detail-value"
+                      th:text="${film.anno}">
+                    2026
+                </span>
+
             </div>
 
-            <div class="detail-field" th:if="${film.genere != null and !film.genere.isBlank()}">
-                <span class="detail-label">GENERE</span>
-                <span class="detail-value" th:text="${film.genere}">Drammatico</span>
+
+            <div class="detail-field"
+                 th:if="${film.genere != null and !film.genere.isBlank()}">
+
+                <span class="detail-label">
+                    GENERE
+                </span>
+
+                <span class="detail-value"
+                      th:text="${film.genere}">
+                    Drammatico
+                </span>
+
             </div>
 
-            <div class="detail-field" th:if="${film.paeseProduzione != null and !film.paeseProduzione.isBlank()}">
-                <span class="detail-label">PAESE</span>
-                <span class="detail-value" th:text="${film.paeseProduzione}">Italia</span>
+
+            <div class="detail-field"
+                 th:if="${film.paeseProduzione != null and !film.paeseProduzione.isBlank()}">
+
+                <span class="detail-label">
+                    PAESE
+                </span>
+
+                <span class="detail-value"
+                      th:text="${film.paeseProduzione}">
+                    Italia
+                </span>
+
             </div>
+
         </aside>
+
     </section>
 
-    <section class="director-films-section reviews-section">
+
+    <!-- FESTIVAL A CUI PARTECIPA -->
+
+    <section class="director-films-section">
+
         <header class="section-header">
+
             <div>
-                <p class="section-kicker">RECENSIONI</p>
-                <h2>RECENSIONI DEGLI UTENTI</h2>
+                <p class="section-kicker">
+                    FESTIVAL
+                </p>
+
+                <h2>
+                    FESTIVAL A CUI PARTECIPA
+                </h2>
             </div>
+
+        </header>
+
+
+        <div class="empty-state-dark"
+             th:if="${film.festival == null or film.festival.isEmpty()}">
+
+            <h2>Nessun festival</h2>
+
+            <p>
+                Questo film non partecipa ancora a nessun festival.
+            </p>
+
+        </div>
+
+
+        <div class="entity-grid"
+             th:unless="${film.festival == null or film.festival.isEmpty()}">
+
+            <article class="entity-card"
+                     th:each="festival : ${film.festival}">
+
+                <div class="entity-card-main">
+
+                    <div class="entity-card-header">
+
+                        <div>
+
+                            <h2>
+                                <a th:href="|http://localhost:5173/festivals/${festival.id}|"
+                                   th:text="${festival.nome}">
+                                    Nome festival
+                                </a>
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <dl class="details-list">
+
+                        <div>
+                            <dt>Città</dt>
+
+                            <dd th:text="${festival.citta}">
+                                Roma
+                            </dd>
+                        </div>
+
+
+                        <div>
+                            <dt>Anno</dt>
+
+                            <dd th:text="${festival.anno}">
+                                2026
+                            </dd>
+                        </div>
+
+
+                        <div>
+                            <dt>Data inizio</dt>
+
+                            <dd th:text="${#temporals.format(
+                                    festival.dataInizio,
+                                    'dd/MM/yyyy'
+                            )}">
+                                01/09/2026
+                            </dd>
+                        </div>
+
+
+                        <div>
+                            <dt>Data fine</dt>
+
+                            <dd th:text="${#temporals.format(
+                                    festival.dataFine,
+                                    'dd/MM/yyyy'
+                            )}">
+                                05/09/2026
+                            </dd>
+                        </div>
+
+                    </dl>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROIEZIONI -->
+
+    <section class="director-films-section">
+
+        <header class="section-header">
+
+            <div>
+                <p class="section-kicker">
+                    PROIEZIONI
+                </p>
+
+                <h2>
+                    PROIEZIONI DEL FILM
+                </h2>
+            </div>
+
+        </header>
+
+
+        <div class="empty-state-dark"
+             th:if="${film.proiezioni == null or film.proiezioni.isEmpty()}">
+
+            <h2>Nessuna proiezione</h2>
+
+            <p>
+                Non sono ancora previste proiezioni per questo film.
+            </p>
+
+        </div>
+
+
+        <div class="entity-grid"
+             th:unless="${film.proiezioni == null or film.proiezioni.isEmpty()}">
+
+            <article class="entity-card"
+                     th:each="proiezione : ${film.proiezioni}">
+
+                <div class="entity-card-main">
+
+                    <div class="entity-card-header">
+
+                        <div>
+
+                            <h2 th:text="${proiezione.festival.nome}">
+                                Nome festival
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <dl class="details-list">
+
+                        <div>
+
+                            <dt>Data</dt>
+
+                            <dd th:text="${#temporals.format(
+                                    proiezione.data,
+                                    'dd/MM/yyyy'
+                            )}">
+                                01/09/2026
+                            </dd>
+
+                        </div>
+
+
+                        <div>
+
+                            <dt>Ora</dt>
+
+                            <dd th:text="${#temporals.format(
+                                    proiezione.ora,
+                                    'HH:mm'
+                            )}">
+                                20:30
+                            </dd>
+
+                        </div>
+
+
+                        <div>
+
+                            <dt>Sala</dt>
+
+                            <dd th:if="${proiezione.sala != null}"
+                                th:text="${proiezione.sala.nome}">
+                                Sala 1
+                            </dd>
+
+                            <dd th:if="${proiezione.sala == null}">
+                                Non assegnata
+                            </dd>
+
+                        </div>
+
+
+                        <div>
+
+                            <dt>Stato</dt>
+
+                            <dd th:text="${proiezione.stato}">
+                                SCHEDULED
+                            </dd>
+
+                        </div>
+
+                    </dl>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- RECENSIONI -->
+
+    <section class="director-films-section reviews-section">
+
+        <header class="section-header">
+
+            <div>
+
+                <p class="section-kicker">
+                    RECENSIONI
+                </p>
+
+                <h2>
+                    RECENSIONI DEGLI UTENTI
+                </h2>
+
+            </div>
+
 
             <a class="button accent"
                th:if="${userDetails != null and !haGiaRecensito}"
@@ -109,99 +466,210 @@
                 + Scrivi una recensione
             </a>
 
+
             <a class="button outline"
                th:if="${userDetails == null}"
                th:href="@{/login}">
                 Accedi per recensire
             </a>
+
         </header>
+
 
         <p class="error"
            th:if="${param.erroreRecensione != null and param.erroreRecensione[0] == 'giaPresente'}">
             Hai già scritto una recensione per questo film.
         </p>
 
+
         <p class="error"
            th:if="${param.erroreRecensione != null and param.erroreRecensione[0] == 'nonAutore'}">
             Puoi modificare o eliminare soltanto le tue recensioni.
         </p>
 
-        <div class="director-details review-statistics" th:if="${numeroRecensioni > 0}">
+
+        <div class="director-details review-statistics"
+             th:if="${numeroRecensioni > 0}">
+
             <div class="detail-field">
-                <span class="detail-label">VOTO MEDIO</span>
-                <span class="detail-value">
-                    <span th:text="${#numbers.formatDecimal(votoMedio, 1, 1)}">4,3</span>
-                    <span>/ 5</span>
+
+                <span class="detail-label">
+                    VOTO MEDIO
                 </span>
+
+                <span class="detail-value">
+
+                    <span th:text="${#numbers.formatDecimal(votoMedio, 1, 1)}">
+                        4,3
+                    </span>
+
+                    <span>/ 5</span>
+
+                </span>
+
             </div>
+
 
             <div class="detail-field">
-                <span class="detail-label">NUMERO RECENSIONI</span>
-                <span class="detail-value" th:text="${numeroRecensioni}">12</span>
+
+                <span class="detail-label">
+                    NUMERO RECENSIONI
+                </span>
+
+                <span class="detail-value"
+                      th:text="${numeroRecensioni}">
+                    12
+                </span>
+
             </div>
+
         </div>
 
-        <div class="empty-state-dark" th:if="${recensioni.empty}">
+
+        <div class="empty-state-dark"
+             th:if="${recensioni.empty}">
+
             <h2>Nessuna recensione</h2>
-            <p>Questo film non ha ancora ricevuto recensioni.</p>
+
+            <p>
+                Questo film non ha ancora ricevuto recensioni.
+            </p>
+
         </div>
 
-        <div class="entity-grid reviews-grid" th:unless="${recensioni.empty}">
-            <article class="entity-card review-card" th:each="recensione : ${recensioni.content}">
+
+        <div class="entity-grid reviews-grid"
+             th:unless="${recensioni.empty}">
+
+            <article class="entity-card review-card"
+                     th:each="recensione : ${recensioni.content}">
+
                 <div class="entity-card-main">
+
                     <div class="entity-card-header">
+
                         <div class="avatar"
-                             th:text="${#strings.toUpperCase(#strings.substring(recensione.autore.username, 0, 1))}">U</div>
-                        <div>
-                            <h2 th:text="${recensione.autore.username}">username</h2>
-                            <span class="muted"
-                                  th:text="${#temporals.format(recensione.data, 'dd/MM/yyyy')}">09/09/2026</span>
+                             th:text="${#strings.toUpperCase(
+                                #strings.substring(
+                                    recensione.autore.username,
+                                    0,
+                                    1
+                                )
+                             )}">
+                            U
                         </div>
+
+
+                        <div>
+
+                            <h2 th:text="${recensione.autore.username}">
+                                username
+                            </h2>
+
+                            <span class="muted"
+                                  th:text="${#temporals.format(
+                                      recensione.data,
+                                      'dd/MM/yyyy'
+                                  )}">
+                                09/09/2026
+                            </span>
+
+                        </div>
+
                     </div>
 
+
                     <dl class="details-list">
+
                         <div>
+
                             <dt>Voto</dt>
-                            <dd th:text="|${recensione.voto} / 5|">5 / 5</dd>
+
+                            <dd th:text="|${recensione.voto} / 5|">
+                                5 / 5
+                            </dd>
+
                         </div>
+
                     </dl>
+
 
                     <p th:text="${recensione.testo}">
                         Testo della recensione.
                     </p>
+
                 </div>
+
 
                 <div class="card-actions"
                      th:if="${utenteId != null and utenteId.equals(recensione.autore.id)}">
-                    <a class="button secondary"
-                       th:href="@{/recensioni/{id}/edit(id=${recensione.id})}">Modifica</a>
 
-                    <form th:action="@{/recensioni/{id}/delete(id=${recensione.id})}" method="post">
-                        <button class="button danger" type="submit">Elimina</button>
+                    <a class="button secondary"
+                       th:href="@{/recensioni/{id}/edit(id=${recensione.id})}">
+                        Modifica
+                    </a>
+
+
+                    <form th:action="@{/recensioni/{id}/delete(id=${recensione.id})}"
+                          method="post">
+
+                        <button class="button danger"
+                                type="submit">
+                            Elimina
+                        </button>
+
                     </form>
+
                 </div>
+
             </article>
+
         </div>
 
-        <div class="form-actions pagination-actions" th:if="${recensioni.totalPages > 1}">
+
+        <div class="form-actions pagination-actions"
+             th:if="${recensioni.totalPages > 1}">
+
             <a class="button outline"
                th:if="${recensioni.hasPrevious()}"
-               th:href="@{/films/{id}(id=${film.id}, page=${recensioni.number - 1})}">
+               th:href="@{/films/{id}(
+                    id=${film.id},
+                    page=${recensioni.number - 1}
+               )}">
                 ← Precedente
             </a>
 
+
             <span class="muted">
-                Pagina <strong th:text="${recensioni.number + 1}">1</strong>
-                di <strong th:text="${recensioni.totalPages}">1</strong>
+
+                Pagina
+
+                <strong th:text="${recensioni.number + 1}">
+                    1
+                </strong>
+
+                di
+
+                <strong th:text="${recensioni.totalPages}">
+                    1
+                </strong>
+
             </span>
+
 
             <a class="button outline"
                th:if="${recensioni.hasNext()}"
-               th:href="@{/films/{id}(id=${film.id}, page=${recensioni.number + 1})}">
+               th:href="@{/films/{id}(
+                    id=${film.id},
+                    page=${recensioni.number + 1}
+               )}">
                 Successiva →
             </a>
+
         </div>
+
     </section>
+
 </main>
 
 </body>

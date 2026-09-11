@@ -39,7 +39,8 @@
               th:action="${modifica}
                     ? @{/admin/films/{id}(id=${film.id})}
                     : @{/admin/films}"
-              method="post">
+              method="post"
+              enctype="multipart/form-data">
 
             <div class="form-field">
                 <label for="titolo">Titolo</label>
@@ -97,33 +98,18 @@
             </div>
 
             <div class="form-field">
-                <span class="form-label">Locandina</span>
+                <label for="fileLocandina">Locandina</label>
 
-                <p class="muted" th:if="${#lists.isEmpty(locandine)}">
-                    Non ci sono locandine PNG nella cartella
-                    <strong>static/images/locandine</strong>.
-                </p>
+                <input id="fileLocandina"
+                       type="file"
+                       name="fileLocandina"
+                       accept="image/*">
 
-                <div class="locandine-grid" th:unless="${#lists.isEmpty(locandine)}">
+                <div th:if="${modifica and film.locandina != null and !film.locandina.isBlank()}">
+                    <p>Locandina attuale:</p>
 
-                    <label class="locandina-scelta locandina-nessuna">
-                        <input type="radio"
-                               th:field="*{locandina}"
-                               value="">
-                        <span>Nessuna locandina</span>
-                    </label>
-
-                    <label class="locandina-scelta"
-                           th:each="locandina : ${locandine}">
-
-                        <input type="radio"
-                               th:field="*{locandina}"
-                               th:value="${locandina}">
-
-                        <img th:src="${locandina}"
-                             th:alt="${locandina}">
-                    </label>
-
+                    <img th:src="${film.locandina}"
+                         th:alt="|Locandina di ${film.titolo}|">
                 </div>
             </div>
 

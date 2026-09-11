@@ -5,29 +5,35 @@ import it.uniroma3.siw.moviefestival_backend.model.Film;
 import it.uniroma3.siw.moviefestival_backend.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.io.File;
-import java.util.Arrays;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class FilmService {
     @Autowired
     private FilmRepository filmRepository;
 
-    public List<Film> getAllFilms(){
+    public List<Film> getAllFilms() {
         return filmRepository.findAll();
     }
 
-    public Film getFilm(Long id){
-        return filmRepository.findById(id).orElseThrow(()-> new NotFoundException("film non trovato"));
+    public Film getFilm(Long id) {
+        return filmRepository.findById(id).orElseThrow(() -> new NotFoundException("film non trovato"));
     }
-
-    public Film createFilm(Film film){
+    @Transactional
+    public Film createFilm(Film film) {
         return filmRepository.save(film);
     }
-
-    public Film updateFilm(Long id, Film film){
+    @Transactional
+    public Film updateFilm(Long id, Film film) {
         Film f = getFilm(id);
 
         f.setTitolo(film.getTitolo());
@@ -35,35 +41,38 @@ public class FilmService {
         f.setDurata(film.getDurata());
         f.setGenere(film.getGenere());
         f.setPaeseProduzione(film.getPaeseProduzione());
-        f.setLocandina(film.getLocandina());
+
+        if (film.getLocandina() != null) {
+            f.setLocandina(film.getLocandina());
+        }
+
         f.setRegista(film.getRegista());
 
         return filmRepository.save(f);
     }
-
-    public void deleteFilm(Long id){
-        Film f= getFilm(id);
+    @Transactional
+    public void deleteFilm(Long id) {
+        Film f = getFilm(id);
         filmRepository.delete(f);
     }
 
 
+    // salva la locandina caricata dall'utente e restituisce il suo URL
+    @Transactional
+    public String salvaLocandina(MultipartFile file) throws IOException {
 
-// metodo per caricare le immagini dal progetto, viene salvatoo l'url nella stringa locandina e poi caricata
-    public List<String> getLocandineDisponibili(){
-        File cartella =
-                new File("src/main/resources/static/images/locandine");
+        Path cartella = Paths.get("uploads", "locandine");
 
-        File[] files = cartella.listFiles((dir, nome) ->
-                nome.toLowerCase().endsWith(".png"));
+        Files.createDirectories(cartella);
 
-        if(files == null){
-            return List.of();
-        }
+        String nomeOriginale = file.getOriginalFilename();
 
-        return Arrays.stream(files)
-                .map(File::getName)
-                .sorted()
-                .map(nome -> "/images/locandine/" + nome)
-                .toList();
+        String nomeFile = UUID.randomUUID() + "-" + nomeOriginale;
+
+        Path destinazione = cartella.resolve(nomeFile);
+
+        Files.copy(file.getInputStream(), destinazione, StandardCopyOption.REPLACE_EXISTING);
+
+        return "/uploads/locandine/" + nomeFile;
     }
 }

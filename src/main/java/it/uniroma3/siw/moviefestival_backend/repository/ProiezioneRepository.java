@@ -13,8 +13,10 @@ import java.util.Optional;
 public interface ProiezioneRepository extends JpaRepository<Proiezione, Long> {
 
     // Trova tutte le proiezioni di un festival ordinate per data e ora
-    @EntityGraph(attributePaths = {"film", "sala"})
+    @EntityGraph(attributePaths = {"film", "sala"})  //costituisce lazy con EntithyGRaph
     List<Proiezione> findByFestival_IdOrderByDataAscOraAsc(Long festivalId);
+
+    List<Proiezione> findAllByFestival_IdOrderByDataAscOraAsc(Long festivalId); // per il test con lazy
 
     // Controlla se esistono proiezioni associate a quel festival e film
     Boolean existsByFestival_IdAndFilm_Id(Long festivalId, Long filmId);

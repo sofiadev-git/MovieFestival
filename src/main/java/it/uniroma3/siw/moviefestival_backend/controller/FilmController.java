@@ -13,6 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static it.uniroma3.siw.moviefestival_backend.model.Utente.ADMIN_ROLE;
 
@@ -41,9 +44,7 @@ public class FilmController {
 
 
     @GetMapping("/films/{id}")
-    public String dettaglioFilm(@PathVariable Long id,
-                                @RequestParam(defaultValue = "0") int page,
-                                Model model) {
+    public String dettaglioFilm(@PathVariable Long id, @RequestParam(defaultValue = "0") int page, Model model) {
 
         if (page < 0) {
             page = 0;
@@ -52,37 +53,30 @@ public class FilmController {
         model.addAttribute("film", filmService.getFilm(id));
 
         // recensioni paginate
-        model.addAttribute("recensioni",
-                recensioneService.getRecensioniFilm(id, page));
+        model.addAttribute("recensioni", recensioneService.getRecensioniFilm(id, page));
 
         // statistiche recensioni
-        model.addAttribute("numeroRecensioni",
-                recensioneService.getNumeroRecensioni(id));
+        model.addAttribute("numeroRecensioni", recensioneService.getNumeroRecensioni(id));
 
-        model.addAttribute("votoMedio",
-                recensioneService.getVotoMedio(id));
+        model.addAttribute("votoMedio", recensioneService.getVotoMedio(id));
 
         aggiungiDatiUtente(model);
 
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         /*
          * Se l'utente è autenticato, recuperiamo il suo id
          * e controlliamo se ha già recensito questo film.
          */
-        if (authentication != null
-                && authentication.getPrincipal() instanceof UserDetails userDetails) {
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
 
-            Utente utente =
-                    utenteService.findUtenteByUsername(userDetails.getUsername());
+            Utente utente = utenteService.findUtenteByUsername(userDetails.getUsername());
 
             Long utenteId = utente.getId();
 
             model.addAttribute("utenteId", utenteId);
 
-            model.addAttribute("haGiaRecensito",
-                    recensioneService.hasAlreadyRecensione(id, utenteId));
+            model.addAttribute("haGiaRecensito", recensioneService.hasAlreadyRecensione(id, utenteId));
 
         } else {
             model.addAttribute("utenteId", null);
@@ -97,7 +91,6 @@ public class FilmController {
     public String aggiungiFilm(Model model) {
         model.addAttribute("film", new Film());
         model.addAttribute("registi", registaService.getAllRegisti());
-        model.addAttribute("locandine", filmService.getLocandineDisponibili());
         model.addAttribute("modifica", false);
         aggiungiDatiUtente(model);
 
@@ -106,10 +99,14 @@ public class FilmController {
 
 
     @PostMapping("/admin/films")
-    public String creaFilm(@ModelAttribute Film film,
-                           @RequestParam Long registaId) {
+    public String creaFilm(@ModelAttribute Film film, @RequestParam Long registaId, @RequestParam("fileLocandina") MultipartFile fileLocandina) throws IOException {
 
         film.setRegista(registaService.getRegista(registaId));
+
+        if (!fileLocandina.isEmpty()) {
+            film.setLocandina(filmService.salvaLocandina(fileLocandina));
+        }
+
         filmService.createFilm(film);
 
         return "redirect:/films";
@@ -120,7 +117,6 @@ public class FilmController {
     public String modificaFilm(@PathVariable Long id, Model model) {
         model.addAttribute("film", filmService.getFilm(id));
         model.addAttribute("registi", registaService.getAllRegisti());
-        model.addAttribute("locandine", filmService.getLocandineDisponibili());
         model.addAttribute("modifica", true);
         aggiungiDatiUtente(model);
 
@@ -129,11 +125,14 @@ public class FilmController {
 
 
     @PostMapping("/admin/films/{id}")
-    public String aggiornaFilm(@PathVariable Long id,
-                               @ModelAttribute Film film,
-                               @RequestParam Long registaId) {
+    public String aggiornaFilm(@PathVariable Long id, @ModelAttribute Film film, @RequestParam Long registaId, @RequestParam("fileLocandina") MultipartFile fileLocandina) throws IOException {
 
         film.setRegista(registaService.getRegista(registaId));
+
+        if (!fileLocandina.isEmpty()) {
+            film.setLocandina(filmService.salvaLocandina(fileLocandina));
+        }
+
         filmService.updateFilm(id, film);
 
         return "redirect:/films/" + id;
@@ -148,17 +147,13 @@ public class FilmController {
 
 
     private void aggiungiDatiUtente(Model model) {
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null
-                && authentication.getPrincipal() instanceof UserDetails userDetails) {
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
 
             model.addAttribute("userDetails", userDetails);
 
-            boolean isAdmin = authentication.getAuthorities().stream()
-                    .anyMatch(authority ->
-                            ADMIN_ROLE.equals(authority.getAuthority()));
+            boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority -> ADMIN_ROLE.equals(authority.getAuthority()));
 
             model.addAttribute("isAdmin", isAdmin);
 
