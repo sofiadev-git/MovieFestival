@@ -1,37 +1,77 @@
-HELP.md
+# ==========================================
+# File locali / configurazione sensibile
+# ==========================================
+src/main/resources/application.properties
+src/main/resources/import.sql
+
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# Maven / build
+# ==========================================
 target/
 .mvn/wrapper/maven-wrapper.jar
+
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# ==========================================
+# File caricati durante l'esecuzione
+# ==========================================
+uploads/
+
+# ==========================================
+# Log
+# ==========================================
+logs/
+*.log
+
+# ==========================================
+# Spring Tool Suite
+# ==========================================
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 
-### IntelliJ IDEA ###
-.idea
+# ==========================================
+# IntelliJ IDEA
+# ==========================================
+.idea/
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# ==========================================
+# NetBeans
+# ==========================================
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 build/
+
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# ==========================================
+# VS Code
+# ==========================================
 .vscode/
 
+# ==========================================
+# Sistema operativo
+# ==========================================
+.DS_Store
+Thumbs.db
 
-src/main/resources/application.properties
-src/main/resources/import.sql
+# ==========================================
+# File di supporto Spring generato
+# ==========================================
+HELP.md
