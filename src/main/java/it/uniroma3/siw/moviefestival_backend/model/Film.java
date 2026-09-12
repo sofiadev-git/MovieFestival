@@ -21,7 +21,7 @@ public class Film {
     private String titolo;
 
     @NotNull
-    @Min(1900)
+    @Min(1800)
     @Max(2030)
     private Integer anno;
 

@@ -14,9 +14,11 @@
         Proiezione
     </title>
 
-    <link rel="stylesheet"
-          th:href="@{/css/style.css}">
 
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
 </head>
 
 
@@ -86,6 +88,12 @@
             </p>
 
         </header>
+
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+            Errore
+        </p>
 
 
         <!-- NESSUNA SALA -->
@@ -197,10 +205,21 @@
                         Data
                     </label>
 
-                    <input id="data"
-                           type="date"
-                           th:field="*{data}"
-                           required>
+                    <select id="data"
+                            th:field="*{data}"
+                            required>
+
+                        <option value="">
+                            Seleziona un giorno del festival
+                        </option>
+
+                        <option th:each="giorno : ${giorniFestival}"
+                                th:value="${giorno}"
+                                th:text="${#temporals.format(giorno, 'dd/MM/yyyy')}">
+                            01/01/2026
+                        </option>
+
+                    </select>
 
                 </div>
 
