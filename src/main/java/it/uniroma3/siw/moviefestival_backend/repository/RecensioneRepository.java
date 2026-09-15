@@ -14,4 +14,6 @@ public interface RecensioneRepository extends JpaRepository<Recensione, Long> {
     List<Recensione> findByFilm_Id(Long filmId);
 
     boolean existsByFilm_IdAndAutore_Id(Long filmId, Long autoreId);
+
+    void deleteByFilm_Id(Long filmId);
 }

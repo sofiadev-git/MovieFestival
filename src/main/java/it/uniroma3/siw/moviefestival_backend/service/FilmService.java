@@ -3,6 +3,7 @@ package it.uniroma3.siw.moviefestival_backend.service;
 import it.uniroma3.siw.moviefestival_backend.exception.NotFoundException;
 import it.uniroma3.siw.moviefestival_backend.model.Film;
 import it.uniroma3.siw.moviefestival_backend.repository.FilmRepository;
+import it.uniroma3.siw.moviefestival_backend.repository.RecensioneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,9 @@ import java.util.UUID;
 public class FilmService {
     @Autowired
     private FilmRepository filmRepository;
+
+    @Autowired
+    private RecensioneRepository recensioneRepository;
 
     public List<Film> getAllFilms() {
         return filmRepository.findAll();
@@ -53,6 +57,9 @@ public class FilmService {
     @Transactional
     public void deleteFilm(Long id) {
         Film f = getFilm(id);
+
+        recensioneRepository.deleteByFilm_Id(id);
+
         filmRepository.delete(f);
     }
 
