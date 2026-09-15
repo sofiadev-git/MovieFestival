@@ -429,7 +429,67 @@ button:disabled {
 .danger-link:hover {
     color: #ffb0b0;
 }
+/* =========================
+   FORM FILM
+   ========================= */
 
+.film-form-poster-field {
+    margin-top: .15rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+}
+
+.film-form-poster-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.4rem;
+}
+
+.film-form-poster-current {
+    flex: 0 0 auto;
+}
+
+.film-form-poster-current .field-help {
+    margin-bottom: .55rem;
+}
+
+.film-form-poster-preview {
+    display: block;
+
+    width: 135px;
+    height: 203px;
+
+    object-fit: cover;
+
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 4px;
+
+    background: #102c50;
+}
+
+.film-form-poster-upload {
+    flex: 1;
+    min-width: 0;
+
+    display: grid;
+    gap: .55rem;
+}
+
+.film-form-poster-upload input[type="file"] {
+    min-height: 46px;
+}
+
+@media (max-width: 750px) {
+
+    .film-form-poster-layout {
+        flex-direction: column;
+    }
+
+    .film-form-poster-preview {
+        width: 120px;
+        height: 180px;
+    }
+}
 /* Compatibilità con eventuale vecchia pagina film */
 .film-grid {
     display: grid;
@@ -1214,5 +1274,278 @@ code {
 
     .director-detail-heading {
         align-items: flex-start;
+    }
+}
+
+/* =========================
+   GESTIONE FESTIVAL / PROIEZIONI
+   ========================= */
+.festival-icon-library {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.festival-manage-page {
+    background: #061a35;
+}
+
+.festival-manage-shell {
+    width: min(1180px, calc(100% - 4rem));
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+}
+
+.festival-manage-panel {
+    background: linear-gradient(135deg, #102f58 0%, #0d2a50 100%);
+    border: 1px solid rgba(88, 157, 225, .30);
+    border-radius: 10px;
+}
+
+.festival-add-panel {
+    padding: 1.6rem 1.75rem 1.3rem;
+    margin-bottom: 1.35rem;
+}
+
+.festival-add-panel h1 {
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 1.65rem;
+    font-weight: 850;
+}
+
+.festival-add-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.festival-add-panel select {
+    min-height: 54px;
+    border-color: #d7e1ee;
+    border-radius: 5px;
+    background: #f7f9fc;
+}
+
+.festival-add-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.festival-add-button {
+    min-width: 166px;
+    min-height: 44px;
+}
+
+.action-plus {
+    margin-right: .55rem;
+    font-size: 1.7rem;
+    font-weight: 400;
+    line-height: .7;
+}
+
+.festival-no-more-films {
+    margin: .25rem 0 0;
+}
+
+.festival-empty-panel {
+    padding: 2rem;
+}
+
+.festival-empty-panel h2 {
+    margin-bottom: .45rem;
+    color: #fff;
+}
+
+.festival-empty-panel p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.festival-film-list {
+    display: grid;
+    gap: 1.35rem;
+}
+
+.festival-film-panel {
+    padding: 1.55rem 1.45rem 1.25rem;
+}
+
+.festival-film-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    padding: 0 .2rem;
+}
+
+.festival-film-heading h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.7rem;
+    font-weight: 850;
+}
+
+.festival-film-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    fill: none;
+    stroke: #bcd8f6;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.festival-screening-list {
+    display: grid;
+    gap: .7rem;
+}
+
+.festival-screening-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(87, 154, 220, .28);
+    border-radius: 8px;
+    background: rgba(33, 75, 119, .26);
+}
+
+.festival-screening-details {
+    display: grid;
+    gap: 0;
+    margin: 0;
+}
+
+.festival-screening-detail {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(150px, .8fr);
+    align-items: center;
+    gap: 1rem;
+    min-height: 34px;
+    border-bottom: 1px solid rgba(180, 210, 240, .16);
+}
+
+.festival-screening-detail:last-child {
+    border-bottom: 0;
+}
+
+.festival-screening-detail dt {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    color: #c4d4e8;
+    font-weight: 500;
+}
+
+.festival-screening-detail dt svg {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    fill: none;
+    stroke: #b9d6f5;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.festival-screening-detail dd {
+    margin: 0;
+    color: #fff;
+    font-weight: 750;
+    text-align: left;
+}
+
+.festival-screening-actions {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+}
+
+.festival-screening-actions form,
+.festival-film-actions form {
+    margin: 0;
+}
+
+.festival-screening-actions .button {
+    min-width: 124px;
+    gap: .55rem;
+}
+
+.festival-screening-actions .button svg,
+.festival-film-actions .button svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.festival-screening-actions .button.secondary {
+    border-color: #79bfff;
+    color: #eef7ff;
+}
+
+.festival-screening-actions .button.secondary:hover {
+    background: rgba(93, 169, 239, .13);
+}
+
+.festival-film-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(180, 210, 240, .20);
+}
+
+.festival-film-actions .button {
+    gap: .55rem;
+}
+
+@media (max-width: 900px) {
+    .festival-screening-card {
+        grid-template-columns: 1fr;
+    }
+
+    .festival-screening-actions {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 680px) {
+    .festival-manage-shell {
+        width: calc(100% - 2rem);
+        padding-top: 1.25rem;
+    }
+
+    .festival-add-panel,
+    .festival-film-panel {
+        padding: 1.2rem;
+    }
+
+    .festival-screening-detail {
+        grid-template-columns: 1fr;
+        gap: .2rem;
+        padding: .55rem 0;
+    }
+
+    .festival-screening-actions,
+    .festival-film-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .festival-screening-actions .button,
+    .festival-film-actions .button,
+    .festival-screening-actions form,
+    .festival-film-actions form,
+    .festival-screening-actions form .button,
+    .festival-film-actions form .button {
+        width: 100%;
     }
 }

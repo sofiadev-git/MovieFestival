@@ -4,345 +4,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Programma Festival - Movie Festival</title>
-
-    <link rel="stylesheet"
-          th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
-<body class="festival-page">
+<body class="festival-page festival-manage-page">
+
+<!-- Icone usate solo in questa pagina: nessuna libreria esterna necessaria. -->
+<svg class="festival-icon-library" aria-hidden="true">
+    <symbol id="icon-film" viewBox="0 0 24 24">
+        <rect x="3" y="5" width="18" height="14" rx="1"></rect>
+        <path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"></path>
+    </symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24">
+        <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+        <path d="M8 3v4M16 3v4M3 10h18"></path>
+    </symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 7v5l3 2"></path>
+    </symbol>
+    <symbol id="icon-room" viewBox="0 0 24 24">
+        <path d="M5 21V5l11-2v18"></path>
+        <path d="M5 21h14M13 12h.01"></path>
+    </symbol>
+    <symbol id="icon-tag" viewBox="0 0 24 24">
+        <path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9-9-9Z"></path>
+        <circle cx="8" cy="8" r="1"></circle>
+    </symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24">
+        <path d="M4 20h4l11-11-4-4L4 16v4Z"></path>
+        <path d="m13 7 4 4"></path>
+    </symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24">
+        <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"></path>
+    </symbol>
+</svg>
 
 <nav class="navbar">
-
-    <a class="navbar-brand"
-       th:href="@{/}">
-        Movie Festival
-    </a>
+    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
 
     <div class="nav-links">
+        <a th:href="@{/festivals}">Festival</a>
+        <a th:href="@{/films}">Film</a>
+        <a th:href="@{/registi}">Registi</a>
+        <a th:href="@{/admin}">Area Admin</a>
 
-        <a th:href="@{/festivals}">
-            Festival
-        </a>
-
-        <a th:href="@{/films}">
-            Film
-        </a>
-
-        <a th:href="@{/registi}">
-            Registi
-        </a>
-
-        <a th:href="@{/admin}">
-            Area Admin
-        </a>
-
-        <form th:action="@{/logout}"
-              method="post">
-
-            <button class="nav-button"
-                    type="submit">
-                Logout
-            </button>
-
+        <form th:action="@{/logout}" method="post">
+            <button class="nav-button" type="submit">Logout</button>
         </form>
-
     </div>
-
 </nav>
 
-
-<main class="site-container">
-
-    <header class="section-header">
-
-        <div>
-
-            <p class="section-kicker">
-                PROGRAMMA FESTIVAL
-            </p>
-
-            <h1 th:text="${festival.nome}">
-                Festival
-            </h1>
-
-            <p>
-
-                <span th:text="${#temporals.format(
-                        festival.dataInizio,
-                        'dd/MM/yyyy'
-                )}">
-                    01/09/2026
-                </span>
-
-                <span> – </span>
-
-                <span th:text="${#temporals.format(
-                        festival.dataFine,
-                        'dd/MM/yyyy'
-                )}">
-                    05/09/2026
-                </span>
-
-            </p>
-
-        </div>
-
-    </header>
-
+<main class="festival-manage-shell">
 
     <!-- AGGIUNTA FILM AL FESTIVAL -->
-
-    <section class="form-card">
-
-        <header class="form-heading">
-
-            <p class="section-kicker">
-                FILM PARTECIPANTI
-            </p>
-
-            <h2>
-                Aggiungi un film
-            </h2>
-
-        </header>
-
+    <section class="festival-manage-panel festival-add-panel">
+        <h1>Aggiungi un film</h1>
 
         <form th:if="${!#lists.isEmpty(filmDisponibili)}"
-              th:action="@{/admin/festivals/{festivalId}/films(
-                    festivalId=${festival.id}
-              )}"
-              method="post">
+              th:action="@{/admin/festivals/{festivalId}/films(festivalId=${festival.id})}"
+              method="post"
+              class="festival-add-form">
 
             <div class="form-field">
-
-                <label for="filmId">
-                    Film
-                </label>
-
-                <select id="filmId"
-                        name="filmId"
-                        required>
-
-                    <option value="">
-                        Seleziona un film
-                    </option>
-
+                <label for="filmId">Film</label>
+                <select id="filmId" name="filmId" required>
+                    <option value="">Seleziona un film</option>
                     <option th:each="film : ${filmDisponibili}"
                             th:value="${film.id}"
                             th:text="${film.titolo}">
                         Film
                     </option>
-
                 </select>
-
             </div>
 
-
-            <div class="form-actions">
-
-                <button class="button accent"
-                        type="submit">
+            <div class="festival-add-actions">
+                <button class="button accent festival-add-button" type="submit">
+                    <span class="action-plus" aria-hidden="true">+</span>
                     Aggiungi film
                 </button>
-
             </div>
-
         </form>
 
-
-        <p class="muted"
+        <p class="muted festival-no-more-films"
            th:if="${#lists.isEmpty(filmDisponibili)}">
-
             Non ci sono altri film disponibili da aggiungere.
-
         </p>
-
     </section>
-
 
     <!-- NESSUN FILM -->
-
-    <section class="empty-state-dark"
+    <section class="festival-manage-panel festival-empty-panel"
              th:if="${#lists.isEmpty(films)}">
-
-        <h2>
-            Nessun film associato al festival
-        </h2>
-
-        <p>
-            Aggiungi almeno un film per poter creare il programma.
-        </p>
-
+        <h2>Nessun film associato al festival</h2>
+        <p>Aggiungi almeno un film per poter creare il programma.</p>
     </section>
 
-
     <!-- FILM E RELATIVE PROIEZIONI -->
-
-    <section class="entity-grid"
+    <section class="festival-film-list"
              th:unless="${#lists.isEmpty(films)}">
 
-        <article class="entity-card"
+        <article class="festival-manage-panel festival-film-panel"
                  th:each="film : ${films}">
 
-            <div class="entity-card-main">
+            <header class="festival-film-heading">
+                <svg class="festival-film-icon" aria-hidden="true">
+                    <use href="#icon-film"></use>
+                </svg>
+                <h2 th:text="${film.titolo}">Film</h2>
+            </header>
 
-                <div class="entity-card-header">
-
-                    <div>
-
-                        <h2 th:text="${film.titolo}">
-                            Film
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PROIEZIONI DI QUESTO FILM -->
-
-                <div th:each="proiezione : ${proiezioni}"
+            <div class="festival-screening-list">
+                <div class="festival-screening-card"
+                     th:each="proiezione : ${proiezioni}"
                      th:if="${proiezione.film.id == film.id}">
 
-                    <dl class="details-list">
-
-                        <div>
-
+                    <dl class="festival-screening-details">
+                        <div class="festival-screening-detail">
                             <dt>
-                                Data
+                                <svg aria-hidden="true"><use href="#icon-calendar"></use></svg>
+                                <span>Data</span>
                             </dt>
-
-                            <dd th:text="${#temporals.format(
-                                    proiezione.data,
-                                    'dd/MM/yyyy'
-                            )}">
+                            <dd th:text="${#temporals.format(proiezione.data, 'dd/MM/yyyy')}">
                                 01/09/2026
                             </dd>
-
                         </div>
 
-
-                        <div>
-
+                        <div class="festival-screening-detail">
                             <dt>
-                                Ora
+                                <svg aria-hidden="true"><use href="#icon-clock"></use></svg>
+                                <span>Ora</span>
                             </dt>
-
-                            <dd th:text="${#temporals.format(
-                                    proiezione.ora,
-                                    'HH:mm'
-                            )}">
+                            <dd th:text="${#temporals.format(proiezione.ora, 'HH:mm')}">
                                 20:30
                             </dd>
-
                         </div>
 
-
-                        <div>
-
+                        <div class="festival-screening-detail">
                             <dt>
-                                Sala
+                                <svg aria-hidden="true"><use href="#icon-room"></use></svg>
+                                <span>Sala</span>
                             </dt>
-
-                            <dd th:text="${proiezione.sala.nome}">
-                                Sala
-                            </dd>
-
+                            <dd th:text="${proiezione.sala.nome}">Sala</dd>
                         </div>
 
-
-                        <div>
-
+                        <div class="festival-screening-detail">
                             <dt>
-                                Stato
+                                <svg aria-hidden="true"><use href="#icon-tag"></use></svg>
+                                <span>Stato</span>
                             </dt>
-
-                            <dd th:text="${proiezione.stato}">
-                                SCHEDULED
-                            </dd>
-
+                            <dd th:text="${proiezione.stato}">SCHEDULED</dd>
                         </div>
-
                     </dl>
 
-
-                    <div class="card-actions">
-
+                    <div class="festival-screening-actions">
                         <a class="button secondary compact"
                            th:href="@{/admin/festivals/{festivalId}/proiezioni/{id}/edit(
                                 festivalId=${festival.id},
                                 id=${proiezione.id}
                            )}">
+                            <svg aria-hidden="true"><use href="#icon-edit"></use></svg>
                             Modifica
                         </a>
-
 
                         <form th:action="@{/admin/festivals/{festivalId}/proiezioni/{id}/delete(
                                 festivalId=${festival.id},
                                 id=${proiezione.id}
                               )}"
                               method="post">
-
-                            <button class="button danger compact"
-                                    type="submit">
+                            <button class="button danger compact" type="submit">
+                                <svg aria-hidden="true"><use href="#icon-trash"></use></svg>
                                 Elimina
                             </button>
-
                         </form>
-
                     </div>
-
                 </div>
-
             </div>
 
-
-            <!-- AZIONI DEL FILM -->
-
-            <div class="card-actions">
-
+            <div class="festival-film-actions">
                 <a class="button accent"
                    th:href="@{/admin/festivals/{festivalId}/films/{filmId}/proiezioni/nuova(
                         festivalId=${festival.id},
                         filmId=${film.id}
                    )}">
-                    + Proiezione
+                    <span class="action-plus" aria-hidden="true">+</span>
+                    Proiezione
                 </a>
-
 
                 <form th:action="@{/admin/festivals/{festivalId}/films/{filmId}/delete(
                         festivalId=${festival.id},
                         filmId=${film.id}
                       )}"
                       method="post">
-
-                    <button class="button danger"
-                            type="submit">
+                    <button class="button danger" type="submit">
+                        <svg aria-hidden="true"><use href="#icon-trash"></use></svg>
                         Rimuovi film
                     </button>
-
                 </form>
-
             </div>
-
         </article>
-
     </section>
-
-
-    <div class="form-actions">
-
-        <a class="button outline"
-           th:href="@{/festivals}">
-            Torna ai festival
-        </a>
-
-    </div>
 
 </main>
 
 </body>
-
 </html>

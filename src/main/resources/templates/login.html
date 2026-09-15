@@ -1,29 +1,94 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title><link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
-<body>
+<body class="auth-page">
+
 <nav class="navbar">
     <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+
     <div class="nav-links">
         <a th:href="@{/festivals}">Festival</a>
         <a th:href="@{/films}">Film</a>
         <a th:href="@{/registi}">Registi</a>
     </div>
 </nav>
-<main class="container"><section class="panel" style="max-width:520px;margin:auto">
-    <h1>Login</h1>
-    <p class="success" th:if="${param.registered}">Registrazione completata. Ora puoi accedere.</p>
-    <p class="error" th:if="${param.error}">Username o password non corretti.</p>
-    <p class="success" th:if="${param.logout}">Logout effettuato.</p>
-    <form class="form-grid" th:action="@{/login}" method="post">
-        <label>Username<input type="text" name="username" required></label>
-        <label>Password<input type="password" name="password" required></label>
-        <button type="submit">Accedi</button>
-    </form>
-    <p>Non hai un account? <a th:href="@{/register}">Registrati</a></p>
-</section></main>
+
+<main class="auth-main">
+    <section class="auth-card">
+        <div class="auth-heading">
+            <h1>Login</h1>
+            <p>Accedi al tuo account</p>
+        </div>
+
+        <p class="auth-message auth-success"
+           th:if="${param.registered}">
+            Registrazione completata. Ora puoi accedere.
+        </p>
+
+        <p class="auth-message auth-error"
+           th:if="${param.error}">
+            Username o password non corretti.
+        </p>
+
+        <p class="auth-message auth-success"
+           th:if="${param.logout}">
+            Logout effettuato.
+        </p>
+
+        <form class="auth-form" th:action="@{/login}" method="post">
+            <div class="auth-field">
+                <label for="username">Username</label>
+
+                <div class="auth-input-wrap">
+                    <svg class="auth-input-icon"
+                         viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5Zm0 2c-4.42 0-8 2.24-8 5v2h16v-2c0-2.76-3.58-5-8-5Z"/>
+                    </svg>
+
+                    <input id="username"
+                           type="text"
+                           name="username"
+                           placeholder="Inserisci il tuo username"
+                           autocomplete="username"
+                           required>
+                </div>
+            </div>
+
+            <div class="auth-field">
+                <label for="password">Password</label>
+
+                <div class="auth-input-wrap">
+                    <svg class="auth-input-icon"
+                         viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M17 8h-1V6a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2Zm-7-2a2 2 0 0 1 4 0v2h-4V6Zm3 10.73V19h-2v-2.27a2 2 0 1 1 2 0Z"/>
+                    </svg>
+
+                    <input id="password"
+                           type="password"
+                           name="password"
+                           placeholder="Inserisci la tua password"
+                           autocomplete="current-password"
+                           required>
+                </div>
+            </div>
+
+            <button class="auth-submit" type="submit">Accedi</button>
+        </form>
+
+        <p class="auth-footer">
+            Non hai un account?
+            <a th:href="@{/register}">Registrati</a>
+        </p>
+    </section>
+</main>
+
 </body>
 </html>

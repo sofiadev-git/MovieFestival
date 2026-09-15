@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title th:text="${modifica} ? 'Modifica film' : 'Nuovo film'">
         Film
@@ -11,28 +11,40 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
-<body>
+<body class="festival-page">
 
 <nav class="navbar">
     <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
+
     <div class="nav-links">
         <a th:href="@{/festivals}">Festival</a>
         <a th:href="@{/films}">Film</a>
         <a th:href="@{/registi}">Registi</a>
         <a th:href="@{/admin}">Area Admin</a>
+
         <form th:action="@{/logout}" method="post">
             <button class="nav-button" type="submit">Logout</button>
         </form>
     </div>
 </nav>
 
-<main class="container">
+<main class="form-page form-page-wide">
 
-    <section class="panel">
+    <section class="form-card">
 
-        <h1 th:text="${modifica} ? 'Modifica film' : 'Nuovo film'">
-            Film
-        </h1>
+        <header class="form-heading">
+            <p class="section-kicker">AREA AMMINISTRATORE</p>
+
+            <h1 th:text="${modifica} ? 'Modifica film' : 'Nuovo film'">
+                Film
+            </h1>
+        </header>
+
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+            Errore
+        </p>
 
         <form class="admin-form"
               th:object="${film}"
@@ -42,83 +54,131 @@
               method="post"
               enctype="multipart/form-data">
 
-            <div class="form-field">
-                <label for="titolo">Titolo</label>
-                <input id="titolo"
-                       type="text"
-                       th:field="*{titolo}"
-                       required>
-            </div>
+            <div class="form-grid two">
 
-            <div class="form-field">
-                <label for="anno">Anno</label>
-                <input id="anno"
-                       type="number"
-                       th:field="*{anno}"
-                       min="1900"
-                       max="2030"
-                       required>
-            </div>
-
-            <div class="form-field">
-                <label for="durata">Durata (minuti)</label>
-                <input id="durata"
-                       type="number"
-                       th:field="*{durata}"
-                       min="1">
-            </div>
-
-            <div class="form-field">
-                <label for="genere">Genere</label>
-                <input id="genere"
-                       type="text"
-                       th:field="*{genere}">
-            </div>
-
-            <div class="form-field">
-                <label for="paeseProduzione">Paese di produzione</label>
-                <input id="paeseProduzione"
-                       type="text"
-                       th:field="*{paeseProduzione}">
-            </div>
-
-            <div class="form-field">
-                <label for="registaId">Regista</label>
-                <select id="registaId"
-                        name="registaId"
-                        required>
-                    <option value="">Seleziona un regista</option>
-
-                    <option th:each="regista : ${registi}"
-                            th:value="${regista.id}"
-                            th:text="|${regista.nome} ${regista.cognome}|"
-                            th:selected="${film.regista != null and film.regista.id == regista.id}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-field">
-                <label for="fileLocandina">Locandina</label>
-
-                <input id="fileLocandina"
-                       type="file"
-                       name="fileLocandina"
-                       accept="image/*">
-
-                <div th:if="${modifica and film.locandina != null and !film.locandina.isBlank()}">
-                    <p>Locandina attuale:</p>
-
-                    <img th:src="${film.locandina}"
-                         th:alt="|Locandina di ${film.titolo}|">
+                <div class="form-field">
+                    <label for="titolo">Titolo</label>
+                    <input id="titolo"
+                           type="text"
+                           th:field="*{titolo}"
+                           required>
                 </div>
+
+                <div class="form-field">
+                    <label for="anno">Anno</label>
+                    <input id="anno"
+                           type="number"
+                           th:field="*{anno}"
+                           min="1900"
+                           max="2030"
+                           required>
+                </div>
+
+                <div class="form-field">
+                    <label for="durata">Durata (minuti)</label>
+                    <input id="durata"
+                           type="number"
+                           th:field="*{durata}"
+                           min="1">
+                </div>
+
+                <div class="form-field">
+                    <label for="genere">Genere</label>
+                    <input id="genere"
+                           type="text"
+                           th:field="*{genere}">
+                </div>
+
+                <div class="form-field">
+                    <label for="paeseProduzione">Paese di produzione</label>
+                    <input id="paeseProduzione"
+                           type="text"
+                           th:field="*{paeseProduzione}">
+                </div>
+
+                <div class="form-field">
+                    <label for="registaId">Regista</label>
+
+                    <select id="registaId"
+                            name="registaId"
+                            required>
+
+                        <option value="">
+                            Seleziona un regista
+                        </option>
+
+                        <option th:each="regista : ${registi}"
+                                th:value="${regista.id}"
+                                th:text="|${regista.nome} ${regista.cognome}|"
+                                th:selected="${film.regista != null and film.regista.id == regista.id}">
+                        </option>
+
+                    </select>
+                </div>
+
             </div>
+
+
+            <div class="form-field film-form-poster-field">
+
+                <label for="fileLocandina">
+                    Locandina
+                </label>
+
+                <div class="film-form-poster-layout">
+
+                    <div class="film-form-poster-current"
+                         th:if="${modifica
+                              and film.locandina != null
+                              and !film.locandina.isBlank()}">
+
+                        <p class="field-help">
+                            Locandina attuale
+                        </p>
+
+                        <img class="film-form-poster-preview"
+                             th:src="${film.locandina}"
+                             th:alt="|Locandina di ${film.titolo}|">
+
+                    </div>
+
+
+                    <div class="film-form-poster-upload">
+
+                        <input id="fileLocandina"
+                               type="file"
+                               name="fileLocandina"
+                               accept="image/*">
+
+                        <p class="field-help"
+                           th:text="${modifica}
+                                ? 'Seleziona un nuovo file solo se vuoi sostituire la locandina attuale.'
+                                : 'Seleziona un file immagine da usare come locandina.'">
+                            Seleziona una locandina.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
 
             <div class="form-actions">
-                <a class="button outline" th:href="@{/films}">Annulla</a>
-                <button class="button accent" type="submit"
-                        th:text="${modifica} ? 'Salva modifiche' : 'Crea film'">
+
+                <a class="button outline"
+                   th:href="@{/films}">
+                    Annulla
+                </a>
+
+                <button class="button accent"
+                        type="submit"
+                        th:text="${modifica}
+                            ? 'Salva modifiche'
+                            : 'Crea film'">
                     Salva
                 </button>
+
             </div>
 
         </form>
