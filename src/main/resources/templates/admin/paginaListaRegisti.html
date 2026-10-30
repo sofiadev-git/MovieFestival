@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Gestisci registi · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body class="ad-body">
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('admin-registi')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Amministrazione / Registi')}">
+    </header>
+    <main class="main ad-main">
+     <header class="ad-list-head">
+      <div>
+       <div class="eyebrow">
+        GESTIONE AUTORI
+       </div>
+       <h1>
+        I registi
+       </h1>
+       <p>
+        Le persone dietro ogni storia, riunite in un elenco.
+       </p>
+      </div>
+      <a class="btn red" th:href="@{/admin/registi/nuovo}">
+       + Nuovo regista
+      </a>
+     </header>
+     <div class="ad-filter-bar">
+      <label class="ad-search-label" for="adminFilter">
+       Ricerca nell'elenco
+      </label>
+      <input aria-controls="recordTable" class="form-control" data-admin-search="" id="adminFilter" placeholder="Cerca per nome, cognome o nazionalità..." type="search"/>
+      <span aria-live="polite" class="ad-result-count" data-admin-count="">
+      </span>
+     </div>
+     <div class="table-scroll ad-table-scroll" id="recordTable">
+      <table class="manage-table">
+       <thead>
+        <tr>
+         <th>
+          Regista
+         </th>
+         <th>
+          Nazionalità
+         </th>
+         <th>
+          Data di nascita
+         </th>
+         <th class="ad-actions-head">
+          Gestione
+         </th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr data-admin-row="" th:each="regista : ${registi}">
+         <td>
+          <div class="ad-identity">
+           <span aria-hidden="true" class="ad-director-icon">
+            ▣
+           </span>
+           <strong th:text="|${regista.nome} ${regista.cognome}|">
+            Regista
+           </strong>
+          </div>
+         </td>
+         <td th:text="${regista.nazionalita}">
+          Italiana
+         </td>
+         <td th:text="${regista.dataNascita != null ? #temporals.format(regista.dataNascita,'dd/MM/yyyy') : '—'}">
+          Data
+         </td>
+         <td class="ad-row-actions">
+          <a class="table-action" th:href="@{/registi/{id}(id=${regista.id})}">
+           Apri
+          </a>
+          <a class="table-action" th:href="@{/admin/registi/{id}/edit(id=${regista.id})}">
+           Modifica
+          </a>
+          <form class="ad-inline-form" data-admin-confirm="Eliminare definitivamente questo regista?" method="post" th:action="@{/admin/registi/{id}/delete(id=${regista.id})}">
+           <button class="table-action ad-delete" type="submit">
+            Elimina
+           </button>
+          </form>
+         </td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <p class="ad-empty" data-admin-empty="" hidden="">
+      Nessun regista corrisponde alla ricerca.
+     </p>
+     <p class="ad-empty" th:if="${#lists.isEmpty(registi)}">
+      Non ci sono ancora elementi. Usa il pulsante «Nuovo» per aggiungerne uno.
+     </p>
+     <footer class="ad-footnote">
+      MOVIOLA
+      <span>
+       · Pannello di gestione dei festival cinematografici
+      </span>
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
+</html>
+

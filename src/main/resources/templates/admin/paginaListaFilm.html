@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Gestisci film · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body class="ad-body">
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('admin-films')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Amministrazione / Film')}">
+    </header>
+    <main class="main ad-main">
+     <header class="ad-list-head">
+      <div>
+       <div class="eyebrow">
+        GESTIONE CATALOGO
+       </div>
+       <h1>
+        I film
+       </h1>
+       <p>
+        Locandine, registi e informazioni dei film disponibili.
+       </p>
+      </div>
+      <a class="btn red" th:href="@{/admin/films/nuovo}">
+       + Nuovo film
+      </a>
+     </header>
+     <div class="ad-filter-bar">
+      <label class="ad-search-label" for="adminFilter">
+       Ricerca nell'elenco
+      </label>
+      <input aria-controls="recordTable" class="form-control" data-admin-search="" id="adminFilter" placeholder="Cerca per titolo, regista o genere..." type="search"/>
+      <span aria-live="polite" class="ad-result-count" data-admin-count="">
+      </span>
+     </div>
+     <div class="table-scroll ad-table-scroll" id="recordTable">
+      <table class="manage-table">
+       <thead>
+        <tr>
+         <th>
+          Film
+         </th>
+         <th>
+          Genere
+         </th>
+         <th>
+          Regia
+         </th>
+         <th class="ad-actions-head">
+          Gestione
+         </th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr data-admin-row="" th:each="film : ${films}">
+         <td>
+          <div class="ad-identity">
+           <div class="ad-poster-thumb">
+            <img loading="lazy" th:alt="|Locandina di ${film.titolo}|" th:if="${film.locandina != null and !film.locandina.isBlank()}" th:src="${film.locandina}"/>
+            <span aria-hidden="true" th:unless="${film.locandina != null and !film.locandina.isBlank()}">
+             ▣
+            </span>
+           </div>
+           <div>
+            <strong th:text="${film.titolo}">
+             Titolo
+            </strong>
+            <small th:text="|${film.anno} · ${film.durata} min|">
+             2026
+            </small>
+           </div>
+          </div>
+         </td>
+         <td th:text="${film.genere}">
+          Drammatico
+         </td>
+         <td th:text="${film.regista != null ? film.regista.nome + ' ' + film.regista.cognome : 'Non assegnato'}">
+          Regista
+         </td>
+         <td class="ad-row-actions">
+          <a class="table-action" th:href="@{/films/{id}(id=${film.id})}">
+           Apri
+          </a>
+          <a class="table-action" th:href="@{/admin/films/{id}/edit(id=${film.id})}">
+           Modifica
+          </a>
+          <form class="ad-inline-form" data-admin-confirm="Eliminare definitivamente questo film?" method="post" th:action="@{/admin/films/{id}/delete(id=${film.id})}">
+           <button class="table-action ad-delete" type="submit">
+            Elimina
+           </button>
+          </form>
+         </td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <p class="ad-empty" data-admin-empty="" hidden="">
+      Nessun film corrisponde alla ricerca.
+     </p>
+     <p class="ad-empty" th:if="${#lists.isEmpty(films)}">
+      Non ci sono ancora elementi. Usa il pulsante «Nuovo» per aggiungerne uno.
+     </p>
+     <footer class="ad-footnote">
+      MOVIOLA
+      <span>
+       · Pannello di gestione dei festival cinematografici
+      </span>
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
+</html>
+

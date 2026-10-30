@@ -1,80 +1,90 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${modifica} ? 'Modifica festival' : 'Nuovo festival'">Festival</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/forms.css}">
-</head>
-<body class="festival-page">
-
-<nav class="navbar">
-    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
-    <div class="nav-links">
-        <a th:href="@{/festivals}">Festival</a>
-        <a th:href="@{/films}">Film</a>
-        <a th:href="@{/registi}">Registi</a>
-        <a th:href="@{/admin}">Area Admin</a>
-        <form th:action="@{/logout}" method="post">
-            <button class="nav-button" type="submit">Logout</button>
-        </form>
-    </div>
-</nav>
-
-<main class="form-page form-page-wide">
-    <section class="form-card">
-        <header class="form-heading">
-            <p class="section-kicker">AREA AMMINISTRATORE</p>
-            <h1 th:text="${modifica} ? 'Modifica festival' : 'Nuovo festival'">Festival</h1>
-        </header>
-
-        <p class="error" th:if="${error}" th:text="${error}">Errore</p>
-
-        <form class="admin-form"
-              th:object="${festival}"
-              th:action="${modifica}
-                    ? @{/admin/festivals/{id}(id=${festival.id})}
-                    : @{/admin/festivals}"
-              method="post">
-
-            <div class="form-grid two">
-                <div class="form-field">
-                    <label for="nome">Nome</label>
-                    <input id="nome" type="text" th:field="*{nome}" required>
-                </div>
-
-
-                <div class="form-field">
-                    <label for="citta">Città</label>
-                    <input id="citta" type="text" th:field="*{citta}" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="dataInizio">Data di inizio</label>
-                    <input id="dataInizio" type="date" th:field="*{dataInizio}" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="dataFine">Data di fine</label>
-                    <input id="dataFine" type="date" th:field="*{dataFine}" required>
-                </div>
-            </div>
-
-            <div class="form-field">
-                <label for="descrizione">Descrizione</label>
-                <textarea id="descrizione" th:field="*{descrizione}" maxlength="4000" required></textarea>
-            </div>
-
-            <div class="form-actions">
-                <a class="button outline" th:href="@{/festivals}">Annulla</a>
-                <button class="button accent"
-                        type="submit"
-                        th:text="${modifica} ? 'Salva modifiche' : 'Crea festival'">Salva</button>
-            </div>
-        </form>
-    </section>
-</main>
-
-</body>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title th:text="|Festival · Moviola|">
+   Festival · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body>
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('admin-festivals')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Amministrazione / Festival')}">
+    </header>
+    <main class="page-content">
+     <div class="form-card">
+      <p class="eyebrow">
+       Amministrazione / Catalogo
+      </p>
+      <h1 class="serif" th:text="${modifica} ? 'Modifica festival' : 'Nuovo festival'">
+       Festival
+      </h1>
+      <p class="lead">
+       Compila i dati qui sotto. Le modifiche saranno salvate nel catalogo Moviola.
+      </p>
+      <p class="error" th:if="${error}" th:text="${error}">
+       Errore
+      </p>
+      <form method="post" th:action="${modifica} ? @{/admin/festivals/{id}(id=${festival.id})} : @{/admin/festivals}" th:object="${festival}">
+       <div class="form-fields">
+        <div class="field">
+         <label for="nome">
+          Nome festival
+         </label>
+         <input id="nome" required="" th:field="*{nome}"/>
+        </div>
+        <div class="field">
+         <label for="citta">
+          Città
+         </label>
+         <input id="citta" required="" th:field="*{citta}"/>
+        </div>
+        <div class="field">
+         <label for="anno">
+          Anno
+         </label>
+         <input id="anno" max="2030" min="1900" required="" th:field="*{anno}" type="number"/>
+        </div>
+        <div class="field">
+         <label for="dataInizio">
+          Inizio festival
+         </label>
+         <input id="dataInizio" required="" th:field="*{dataInizio}" type="date"/>
+        </div>
+        <div class="field">
+         <label for="dataFine">
+          Fine festival
+         </label>
+         <input id="dataFine" required="" th:field="*{dataFine}" type="date"/>
+        </div>
+        <div class="field wide">
+         <label for="descrizione">
+          Descrizione
+         </label>
+         <textarea id="descrizione" maxlength="4000" required="" th:field="*{descrizione}"></textarea>
+        </div>
+       </div>
+       <div class="form-actions">
+        <a class="button" th:href="@{/admin/festivals}">
+         Annulla
+        </a>
+        <button class="button primary" th:text="${modifica} ? 'Salva modifiche' : 'Crea festival'" type="submit">
+         Salva
+        </button>
+       </div>
+      </form>
+     </div>
+     <footer th:replace="~{fragments/shell :: footer}">
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
 </html>
+

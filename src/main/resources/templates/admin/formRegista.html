@@ -1,74 +1,78 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${modifica} ? 'Modifica regista' : 'Nuovo regista'">Regista</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/forms.css}">
-</head>
-<body class="festival-page">
-
-<nav class="navbar">
-    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
-    <div class="nav-links">
-        <a th:href="@{/festivals}">Festival</a>
-        <a th:href="@{/films}">Film</a>
-        <a th:href="@{/registi}">Registi</a>
-        <a th:href="@{/admin}">Area Admin</a>
-        <form th:action="@{/logout}" method="post">
-            <button class="nav-button" type="submit">Logout</button>
-        </form>
-    </div>
-</nav>
-
-<main class="form-page">
-    <section class="form-card">
-        <header class="form-heading">
-            <p class="section-kicker">AREA AMMINISTRATORE</p>
-            <h1 th:text="${modifica} ? 'Modifica regista' : 'Nuovo regista'">Regista</h1>
-        </header>
-
-        <p class="error" th:if="${error}" th:text="${error}">Errore</p>
-
-        <form class="admin-form"
-              th:object="${regista}"
-              th:action="${modifica}
-                    ? @{/admin/registi/{id}(id=${regista.id})}
-                    : @{/admin/registi}"
-              method="post">
-
-            <div class="form-grid two">
-                <div class="form-field">
-                    <label for="nome">Nome</label>
-                    <input id="nome" type="text" th:field="*{nome}" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="cognome">Cognome</label>
-                    <input id="cognome" type="text" th:field="*{cognome}" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="nazionalita">Nazionalità</label>
-                    <input id="nazionalita" type="text" th:field="*{nazionalita}" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="dataNascita">Data di nascita</label>
-                    <input id="dataNascita" type="date" th:field="*{dataNascita}" min="1800-01-01" required>
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <a class="button outline" th:href="@{/registi}">Annulla</a>
-                <button class="button accent" type="submit"
-                        th:text="${modifica} ? 'Salva modifiche' : 'Crea regista'">Salva</button>
-            </div>
-        </form>
-    </section>
-</main>
-
-</body>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title th:text="|Regista · Moviola|">
+   Regista · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body>
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('admin-registi')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Amministrazione / Regista')}">
+    </header>
+    <main class="page-content">
+     <div class="form-card">
+      <p class="eyebrow">
+       Amministrazione / Catalogo
+      </p>
+      <h1 class="serif" th:text="${modifica} ? 'Modifica regista' : 'Nuovo regista'">
+       Regista
+      </h1>
+      <p class="lead">
+       Compila i dati qui sotto. Le modifiche saranno salvate nel catalogo Moviola.
+      </p>
+      <p class="error" th:if="${error}" th:text="${error}">
+       Errore
+      </p>
+      <form method="post" th:action="${modifica} ? @{/admin/registi/{id}(id=${regista.id})} : @{/admin/registi}" th:object="${regista}">
+       <div class="form-fields">
+        <div class="field">
+         <label for="nome">
+          Nome
+         </label>
+         <input id="nome" required="" th:field="*{nome}"/>
+        </div>
+        <div class="field">
+         <label for="cognome">
+          Cognome
+         </label>
+         <input id="cognome" required="" th:field="*{cognome}"/>
+        </div>
+        <div class="field">
+         <label for="nazionalita">
+          Nazionalità
+         </label>
+         <input id="nazionalita" required="" th:field="*{nazionalita}"/>
+        </div>
+        <div class="field">
+         <label for="dataNascita">
+          Data di nascita
+         </label>
+         <input id="dataNascita" required="" th:field="*{dataNascita}" type="date"/>
+        </div>
+       </div>
+       <div class="form-actions">
+        <a class="button" th:href="@{/admin/registi}">
+         Annulla
+        </a>
+        <button class="button primary" th:text="${modifica} ? 'Salva modifiche' : 'Crea regista'" type="submit">
+         Salva
+        </button>
+       </div>
+      </form>
+     </div>
+     <footer th:replace="~{fragments/shell :: footer}">
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
 </html>
+

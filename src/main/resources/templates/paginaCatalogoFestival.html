@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Festival · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body>
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('festivals')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Festival')}">
+    </header>
+    <main class="page-content">
+     <header class="page-intro">
+      <div>
+       <p class="eyebrow">
+        TUTTE LE EDIZIONI
+       </p>
+       <h1 class="intro-title">
+        I festival cinematografici.
+       </h1>
+       <p class="intro-lead">
+        Esplora le rassegne, scopri i film partecipanti e consulta la programmazione di ogni edizione.
+       </p>
+      </div>
+     </header>
+     <div class="catalog-tools">
+      <input aria-label="Cerca festival" data-filter-input="" data-filter-target="[data-search]" placeholder="Cerca festival, città o anno…" type="search"/>
+      <span class="count" th:text="|${#lists.size(festivals)} festival|">
+       Festival
+      </span>
+     </div>
+     <div class="festival-grid">
+      <article class="festival-tile" th:attr="data-search=|${festival.nome} ${festival.citta} ${festival.anno}|" th:each="festival, stat : ${festivals}">
+       <a class="festival-photo" th:aria-label="|Dettagli festival: ${festival.nome}|" th:href="|http://localhost:5173/festivals/${festival.id}|">
+        <img alt="Atmosfera di un festival cinematografico" loading="lazy" th:src="@{/images/moviola-editoriale/festival-roma.webp}"/>
+        <span class="year-label" th:text="${festival.anno}">
+         2026
+        </span>
+       </a>
+       <div class="festival-body">
+        <span class="festival-place" th:text="${festival.citta}">
+         Città
+        </span>
+        <h3>
+         <a th:href="|http://localhost:5173/festivals/${festival.id}|" th:text="${festival.nome}">
+          Nome festival
+         </a>
+        </h3>
+        <p th:text="${festival.descrizione != null ? #strings.abbreviate(festival.descrizione,140) : 'Scopri il festival e la sua programmazione.'}">
+         Descrizione
+        </p>
+        <div class="festival-footer">
+         <span>
+          <span th:text="${#temporals.format(festival.dataInizio,'dd/MM/yyyy')}">
+          </span>
+          —
+          <span th:text="${#temporals.format(festival.dataFine,'dd/MM/yyyy')}">
+          </span>
+         </span>
+         <a aria-label="Apri festival" class="arr" th:href="|http://localhost:5173/festivals/${festival.id}|">
+          →
+         </a>
+        </div>
+       </div>
+      </article>
+     </div>
+     <div class="empty no-results" data-filter-empty="">
+      Nessun festival corrisponde alla ricerca.
+     </div>
+     <div class="empty" th:if="${#lists.isEmpty(festivals)}">
+      Non ci sono ancora festival.
+     </div>
+     <footer th:replace="~{fragments/shell :: footer}">
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
+</html>
+

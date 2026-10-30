@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"><body>
+<aside th:fragment="sidebar(active)" class="sidebar" id="siteSidebar" aria-label="Navigazione Moviola">
+    <a class="wordmark" th:href="@{/}"><span class="wordmark-symbol" aria-hidden="true">m.</span><span><strong>MOVIOLA</strong><small>CINEMA FESTIVAL</small></span></a>
+    <span class="nav-label">SCOPRI</span>
+    <nav class="nav-group" aria-label="Navigazione pubblica">
+        <a class="nav-link" th:classappend="${active == 'home'} ? ' active' : ''" th:href="@{/}">⌂ &nbsp; Home</a>
+        <a class="nav-link" th:classappend="${active == 'festivals'} ? ' active' : ''" th:href="@{/festivals}">▤ &nbsp; Festival</a>
+        <a class="nav-link" th:classappend="${active == 'films'} ? ' active' : ''" th:href="@{/films}">▣ &nbsp; Film</a>
+        <a class="nav-link" th:classappend="${active == 'registi'} ? ' active' : ''" th:href="@{/registi}">◎ &nbsp; Registi</a>
+    </nav>
+    <div class="nav-divider" th:if="${navAdmin}"></div>
+    <span class="nav-label" th:if="${navAdmin}">AMMINISTRAZIONE</span>
+    <nav class="nav-group" aria-label="Amministrazione" th:if="${navAdmin}">
+        <a class="nav-link" th:classappend="${active == 'dashboard'} ? ' active' : ''" th:href="@{/admin}">▦ &nbsp; Panoramica</a>
+        <a class="nav-link" th:classappend="${active == 'admin-festivals'} ? ' active' : ''" th:href="@{/admin/festivals}">▤ &nbsp; Gestisci festival</a>
+        <a class="nav-link" th:classappend="${active == 'admin-films'} ? ' active' : ''" th:href="@{/admin/films}">▣ &nbsp; Gestisci film</a>
+        <a class="nav-link" th:classappend="${active == 'admin-registi'} ? ' active' : ''" th:href="@{/admin/registi}">◎ &nbsp; Gestisci registi</a>
+        <a class="nav-link" th:classappend="${active == 'admin-sale'} ? ' active' : ''" th:href="@{/admin/sale}">▥ &nbsp; Gestisci sale</a>
+        <a class="nav-link" th:classappend="${active == 'programma'} ? ' active' : ''" th:href="@{/admin/programmazione}">◷ &nbsp; Programmazione</a>
+    </nav>
+    <div class="side-grow"></div>
+    <div class="side-quote"><em>Il cinema, da vivere.</em><span>Storie sul grande schermo</span></div>
+    <div class="side-bottom">
+        <a class="nav-link" th:unless="${navAuthenticated}" th:href="@{/login}">Accedi / Registrati</a>
+        <span th:if="${navAuthenticated}" class="side-user" th:text="|● ${navUsername}|">Utente</span>
+        <form th:if="${navAuthenticated}" th:action="@{/logout}" method="post"><button type="submit" class="nav-link">↪ &nbsp; Esci</button></form>
+    </div>
+</aside>
+<header th:fragment="topbar(section)" class="topbar">
+    <div class="top-start"><button class="mobile-menu" type="button" data-toggle-menu aria-controls="siteSidebar" aria-expanded="false" aria-label="Apri menu">☰</button><span class="breadcrumb"><a th:href="@{/}">MOVIOLA</a><i>/</i><strong th:text="${section}">Catalogo</strong></span></div>
+    <div class="top-end"><form class="top-search" th:action="@{/films}" method="get" role="search"><span aria-hidden="true">⌕</span><input name="q" type="search" aria-label="Cerca film" placeholder="Cerca un film..."></form><span class="edition">CINEMA / MOVIOLA</span></div>
+</header>
+<footer th:fragment="footer" class="footer"><span>© Moviola · Il cinema, da vivere.</span><span>Festival · Film · Registi · Proiezioni</span></footer>
+</body></html>

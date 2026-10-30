@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Gestisci festival · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body class="ad-body">
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('admin-festivals')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Amministrazione / Festival')}">
+    </header>
+    <main class="main ad-main">
+     <header class="ad-list-head">
+      <div>
+       <div class="eyebrow">
+        GESTIONE FESTIVAL
+       </div>
+       <h1>
+        I festival
+       </h1>
+       <p>
+        Tutte le edizioni del catalogo, pronte per essere organizzate.
+       </p>
+      </div>
+      <a class="btn red" th:href="@{/admin/festivals/nuovo}">
+       + Nuovo festival
+      </a>
+     </header>
+     <div class="ad-filter-bar">
+      <label class="ad-search-label" for="adminFilter">
+       Ricerca nell'elenco
+      </label>
+      <input aria-controls="recordTable" class="form-control" data-admin-search="" id="adminFilter" placeholder="Cerca per festival, anno o città..." type="search"/>
+      <span aria-live="polite" class="ad-result-count" data-admin-count="">
+      </span>
+     </div>
+     <div class="table-scroll ad-table-scroll" id="recordTable">
+      <table class="manage-table">
+       <thead>
+        <tr>
+         <th>
+          Festival
+         </th>
+         <th>
+          Periodo
+         </th>
+         <th>
+          Città
+         </th>
+         <th class="ad-actions-head">
+          Gestione
+         </th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr data-admin-row="" th:each="festival, index : ${festivals}">
+         <td>
+          <div class="ad-identity">
+           <span aria-hidden="true" class="ad-festival-mini">
+           </span>
+           <div>
+            <strong th:text="${festival.nome}">
+             Festival
+            </strong>
+            <small th:text="${festival.anno}">
+             2026
+            </small>
+           </div>
+          </div>
+         </td>
+         <td>
+          <span th:text="${#temporals.format(festival.dataInizio,'dd/MM/yyyy')}">
+          </span>
+          <span class="ad-date-sep">
+           –
+          </span>
+          <span th:text="${#temporals.format(festival.dataFine,'dd/MM/yyyy')}">
+          </span>
+         </td>
+         <td th:text="${festival.citta}">
+          Roma
+         </td>
+         <td class="ad-row-actions">
+          <a class="table-action" th:href="@{/admin/festivals/{id}/proiezioni(id=${festival.id})}">
+           Programma
+          </a>
+          <a class="table-action" th:href="@{/admin/festivals/{id}/edit(id=${festival.id})}">
+           Modifica
+          </a>
+          <form class="ad-inline-form" data-admin-confirm="Eliminare definitivamente questo festival?" method="post" th:action="@{/admin/festivals/{id}/delete(id=${festival.id})}">
+           <button class="table-action ad-delete" type="submit">
+            Elimina
+           </button>
+          </form>
+         </td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <p class="ad-empty" data-admin-empty="" hidden="">
+      Nessun festival corrisponde alla ricerca.
+     </p>
+     <p class="ad-empty" th:if="${#lists.isEmpty(festivals)}">
+      Non ci sono ancora elementi. Usa il pulsante «Nuovo» per aggiungerne uno.
+     </p>
+     <footer class="ad-footnote">
+      MOVIOLA
+      <span>
+       · Pannello di gestione dei festival cinematografici
+      </span>
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
+</html>
+

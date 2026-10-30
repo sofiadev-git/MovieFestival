@@ -1,92 +1,77 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${modifica} ? 'Modifica recensione' : 'Nuova recensione'">Recensione</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/forms.css}">
-    <link rel="stylesheet" th:href="@{/css/components.css}">
-</head>
-<body class="festival-page">
-
-<nav class="navbar">
-    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
-    <div class="nav-links">
-        <a th:href="@{/festivals}">Festival</a>
-        <a th:href="@{/films}">Film</a>
-        <a th:href="@{/registi}">Registi</a>
-
-        <span class="nav-user"
-              th:if="${userDetails != null}"
-              th:text="${userDetails.username}">username</span>
-
-        <form th:if="${userDetails != null}" th:action="@{/logout}" method="post">
-            <button class="nav-button" type="submit">Logout</button>
-        </form>
-    </div>
-</nav>
-
-<main class="container">
-    <section class="panel">
-        <p class="section-kicker">RECENSIONE</p>
-
-        <h1 th:text="${modifica} ? 'Modifica recensione' : 'Scrivi una recensione'">
-            Recensione
-        </h1>
-
-        <p class="muted">
-            Film: <strong th:text="${film.titolo}">Titolo film</strong>
-        </p>
-
-        <form class="admin-form"
-              th:object="${recensione}"
-              th:action="${modifica}
-                    ? @{/recensioni/{id}(id=${recensione.id})}
-                    : @{/films/{filmId}/recensioni(filmId=${film.id})}"
-              method="post">
-
-            <div class="form-field">
-                <label for="voto">Voto</label>
-                <select id="voto" th:field="*{voto}" required>
-                    <option value="">Seleziona un voto</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-
-                <span class="error"
-                      th:if="${#fields.hasErrors('voto')}"
-                      th:errors="*{voto}">Errore voto</span>
-            </div>
-
-            <div class="form-field">
-                <label for="testo">Testo</label>
-                <textarea id="testo"
-                          th:field="*{testo}"
-                          rows="8"
-                          maxlength="500"
-                          required></textarea>
-
-                <span class="error"
-                      th:if="${#fields.hasErrors('testo')}"
-                      th:errors="*{testo}">Errore testo</span>
-            </div>
-
-            <div class="form-actions">
-                <a class="button outline" th:href="@{/films/{id}(id=${film.id})}">Annulla</a>
-                <button class="button accent"
-                        type="submit"
-                        th:text="${modifica} ? 'Salva modifiche' : 'Pubblica recensione'">
-                    Pubblica recensione
-                </button>
-            </div>
-        </form>
-    </section>
-</main>
-
-</body>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title th:text="|Recensione · Moviola|">
+   Recensione · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body>
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('films')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Film / Recensione')}">
+    </header>
+    <main class="page-content">
+     <div class="form-card">
+      <p class="eyebrow">
+       La tua voce
+      </p>
+      <h1 class="serif" th:text="${modifica} ? 'Modifica recensione' : 'Scrivi una recensione'">
+       Recensione
+      </h1>
+      <p class="lead">
+       Film:
+       <strong th:text="${film.titolo}">
+        Titolo film
+       </strong>
+      </p>
+      <form method="post" th:action="${modifica} ? @{/recensioni/{id}(id=${recensione.id})} : @{/films/{filmId}/recensioni(filmId=${film.id})}" th:object="${recensione}">
+       <div class="form-fields">
+        <div class="field wide">
+         <label for="voto">
+          Il tuo voto
+         </label>
+         <select id="voto" required="" th:field="*{voto}">
+          <option value="">
+           Seleziona un voto
+          </option>
+          <option th:each="i : ${#numbers.sequence(1,5)}" th:text="|${i} / 5|" th:value="${i}">
+           Voto
+          </option>
+         </select>
+         <small class="field-error" th:errors="*{voto}" th:if="${#fields.hasErrors('voto')}">
+         </small>
+        </div>
+        <div class="field wide">
+         <label for="testo">
+          La tua recensione
+         </label>
+         <textarea id="testo" maxlength="500" required="" th:field="*{testo}"></textarea>
+         <small class="field-error" th:errors="*{testo}" th:if="${#fields.hasErrors('testo')}">
+         </small>
+        </div>
+       </div>
+       <div class="form-actions">
+        <a class="button" th:href="@{/films/{id}(id=${film.id})}">
+         Annulla
+        </a>
+        <button class="button primary" th:text="${modifica} ? 'Aggiorna recensione' : 'Pubblica recensione'">
+         Pubblica
+        </button>
+       </div>
+      </form>
+     </div>
+     <footer th:replace="~{fragments/shell :: footer}">
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
 </html>
+

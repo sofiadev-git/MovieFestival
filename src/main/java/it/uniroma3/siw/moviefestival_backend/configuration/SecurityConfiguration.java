@@ -53,12 +53,14 @@ public class SecurityConfiguration {
                     "/register",
                     "/api/festivals/**",
                     "/css/**",
+                    "/js/**",
                     "/uploads/**",
                     "/images/**",
-                    "/favicon.ico").permitAll();
+                    "/favicon.ico",
+                    "/error").permitAll();
             authorize.requestMatchers(HttpMethod.POST, "/register", "/login").permitAll();
-            authorize.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE);
-            authorize.requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE);
+            authorize.requestMatchers(HttpMethod.GET, "/admin", "/admin/**").hasAnyAuthority(ADMIN_ROLE);
+            authorize.requestMatchers(HttpMethod.POST, "/admin", "/admin/**").hasAnyAuthority(ADMIN_ROLE);
             authorize.anyRequest().authenticated();
         });
 

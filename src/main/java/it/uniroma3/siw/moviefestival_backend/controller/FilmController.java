@@ -87,6 +87,13 @@ public class FilmController {
     }
 
 
+    @GetMapping("/admin/films")
+    public String gestisciFilm(Model model) {
+        model.addAttribute("films", filmService.getAllFilms());
+        aggiungiDatiUtente(model);
+        return "admin/paginaListaFilm";
+    }
+
     @GetMapping("/admin/films/nuovo")
     public String aggiungiFilm(Model model) {
         model.addAttribute("film", new Film());
@@ -109,7 +116,7 @@ public class FilmController {
 
         filmService.createFilm(film);
 
-        return "redirect:/films";
+        return "redirect:/admin/films";
     }
 
 
@@ -135,14 +142,14 @@ public class FilmController {
 
         filmService.updateFilm(id, film);
 
-        return "redirect:/films/" + id;
+        return "redirect:/admin/films";
     }
 
 
     @PostMapping("/admin/films/{id}/delete")
     public String eliminaFilm(@PathVariable Long id) {
         filmService.deleteFilm(id);
-        return "redirect:/films";
+        return "redirect:/admin/films";
     }
 
 

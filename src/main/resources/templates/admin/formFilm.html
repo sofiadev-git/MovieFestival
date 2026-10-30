@@ -1,194 +1,107 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title th:text="${modifica} ? 'Modifica film' : 'Nuovo film'">
-        Film
-    </title>
-
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/forms.css}">
-    <link rel="stylesheet" th:href="@{/css/film.css}">
-</head>
-
-<body class="festival-page">
-
-<nav class="navbar">
-    <a class="navbar-brand" th:href="@{/}">Movie Festival</a>
-
-    <div class="nav-links">
-        <a th:href="@{/festivals}">Festival</a>
-        <a th:href="@{/films}">Film</a>
-        <a th:href="@{/registi}">Registi</a>
-        <a th:href="@{/admin}">Area Admin</a>
-
-        <form th:action="@{/logout}" method="post">
-            <button class="nav-button" type="submit">Logout</button>
-        </form>
-    </div>
-</nav>
-
-<main class="form-page form-page-wide">
-
-    <section class="form-card">
-
-        <header class="form-heading">
-            <p class="section-kicker">AREA AMMINISTRATORE</p>
-
-            <h1 th:text="${modifica} ? 'Modifica film' : 'Nuovo film'">
-                Film
-            </h1>
-        </header>
-
-        <p class="error"
-           th:if="${error}"
-           th:text="${error}">
-            Errore
-        </p>
-
-        <form class="admin-form"
-              th:object="${film}"
-              th:action="${modifica}
-                    ? @{/admin/films/{id}(id=${film.id})}
-                    : @{/admin/films}"
-              method="post"
-              enctype="multipart/form-data">
-
-            <div class="form-grid two">
-
-                <div class="form-field">
-                    <label for="titolo">Titolo</label>
-                    <input id="titolo"
-                           type="text"
-                           th:field="*{titolo}"
-                           required>
-                </div>
-
-                <div class="form-field">
-                    <label for="anno">Anno</label>
-                    <input id="anno"
-                           type="number"
-                           th:field="*{anno}"
-                           min="1900"
-                           max="2030"
-                           required>
-                </div>
-
-                <div class="form-field">
-                    <label for="durata">Durata (minuti)</label>
-                    <input id="durata"
-                           type="number"
-                           th:field="*{durata}"
-                           min="1">
-                </div>
-
-                <div class="form-field">
-                    <label for="genere">Genere</label>
-                    <input id="genere"
-                           type="text"
-                           th:field="*{genere}">
-                </div>
-
-                <div class="form-field">
-                    <label for="paeseProduzione">Paese di produzione</label>
-                    <input id="paeseProduzione"
-                           type="text"
-                           th:field="*{paeseProduzione}">
-                </div>
-
-                <div class="form-field">
-                    <label for="registaId">Regista</label>
-
-                    <select id="registaId"
-                            name="registaId"
-                            required>
-
-                        <option value="">
-                            Seleziona un regista
-                        </option>
-
-                        <option th:each="regista : ${registi}"
-                                th:value="${regista.id}"
-                                th:text="|${regista.nome} ${regista.cognome}|"
-                                th:selected="${film.regista != null and film.regista.id == regista.id}">
-                        </option>
-
-                    </select>
-                </div>
-
-            </div>
-
-
-            <div class="form-field film-form-poster-field">
-
-                <label for="fileLocandina">
-                    Locandina
-                </label>
-
-                <div class="film-form-poster-layout">
-
-                    <div class="film-form-poster-current"
-                         th:if="${modifica
-                              and film.locandina != null
-                              and !film.locandina.isBlank()}">
-
-                        <p class="field-help">
-                            Locandina attuale
-                        </p>
-
-                        <img class="film-form-poster-preview"
-                             th:src="${film.locandina}"
-                             th:alt="|Locandina di ${film.titolo}|">
-
-                    </div>
-
-
-                    <div class="film-form-poster-upload">
-
-                        <input id="fileLocandina"
-                               type="file"
-                               name="fileLocandina"
-                               accept="image/*">
-
-                        <p class="field-help"
-                           th:text="${modifica}
-                                ? 'Seleziona un nuovo file solo se vuoi sostituire la locandina attuale.'
-                                : 'Seleziona un file immagine da usare come locandina.'">
-                            Seleziona una locandina.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="form-actions">
-
-                <a class="button outline"
-                   th:href="@{/films}">
-                    Annulla
-                </a>
-
-                <button class="button accent"
-                        type="submit"
-                        th:text="${modifica}
-                            ? 'Salva modifiche'
-                            : 'Crea film'">
-                    Salva
-                </button>
-
-            </div>
-
-        </form>
-
-    </section>
-
-</main>
-
-</body>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title th:text="|Film · Moviola|">
+   Film · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body>
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('admin-films')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Amministrazione / Film')}">
+    </header>
+    <main class="page-content">
+     <div class="form-card">
+      <p class="eyebrow">
+       Amministrazione / Catalogo
+      </p>
+      <h1 class="serif" th:text="${modifica} ? 'Modifica film' : 'Nuovo film'">
+       Film
+      </h1>
+      <p class="lead">
+       Compila i dati qui sotto. Le modifiche saranno salvate nel catalogo Moviola.
+      </p>
+      <p class="error" th:if="${error}" th:text="${error}">
+       Errore
+      </p>
+      <form enctype="multipart/form-data" method="post" th:action="${modifica} ? @{/admin/films/{id}(id=${film.id})} : @{/admin/films}" th:object="${film}">
+       <div class="form-fields">
+        <div class="field">
+         <label for="titolo">
+          Titolo
+         </label>
+         <input id="titolo" required="" th:field="*{titolo}"/>
+        </div>
+        <div class="field">
+         <label for="anno">
+          Anno
+         </label>
+         <input id="anno" max="2030" min="1800" required="" th:field="*{anno}" type="number"/>
+        </div>
+        <div class="field">
+         <label for="durata">
+          Durata (minuti)
+         </label>
+         <input id="durata" max="300" min="20" th:field="*{durata}" type="number"/>
+        </div>
+        <div class="field">
+         <label for="genere">
+          Genere
+         </label>
+         <input id="genere" th:field="*{genere}"/>
+        </div>
+        <div class="field">
+         <label for="paeseProduzione">
+          Paese di produzione
+         </label>
+         <input id="paeseProduzione" th:field="*{paeseProduzione}"/>
+        </div>
+        <div class="field">
+         <label for="registaId">
+          Regista
+         </label>
+         <select id="registaId" name="registaId" required="">
+          <option value="">
+           Scegli un regista
+          </option>
+          <option th:each="regista : ${registi}" th:selected="${film.regista != null and regista.id == film.regista.id}" th:text="|${regista.nome} ${regista.cognome}|" th:value="${regista.id}">
+           Regista
+          </option>
+         </select>
+        </div>
+        <div class="field wide">
+         <label for="fileLocandina">
+          Locandina (immagine)
+         </label>
+         <input accept="image/*" id="fileLocandina" name="fileLocandina" type="file"/>
+         <small th:if="${modifica}">
+          Lascia vuoto per mantenere la locandina attuale.
+         </small>
+         <img alt="Locandina attuale" style="width:95px;border-radius:5px;margin-top:10px" th:if="${modifica and film.locandina != null and !film.locandina.isBlank()}" th:src="${film.locandina}"/>
+        </div>
+       </div>
+       <div class="form-actions">
+        <a class="button" th:href="@{/admin/films}">
+         Annulla
+        </a>
+        <button class="button primary" th:text="${modifica} ? 'Salva modifiche' : 'Crea film'" type="submit">
+         Salva
+        </button>
+       </div>
+      </form>
+     </div>
+     <footer th:replace="~{fragments/shell :: footer}">
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
 </html>
+

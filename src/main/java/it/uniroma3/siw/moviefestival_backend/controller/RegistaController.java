@@ -37,6 +37,13 @@ public class RegistaController {
         return "paginaRegista";
     }
 
+    @GetMapping("/admin/registi")
+    public String gestisciRegisti(Model model) {
+        model.addAttribute("registi", registaService.getAllRegisti());
+        aggiungiDatiUtente(model);
+        return "admin/paginaListaRegisti";
+    }
+
     @GetMapping("/admin/registi/nuovo")
     public String aggiungiRegista(Model model){
         model.addAttribute("regista", new Regista());
@@ -49,7 +56,7 @@ public class RegistaController {
     public String creaRegista(@ModelAttribute Regista regista,Model model) {
         registaService.createRegista(regista);
         aggiungiDatiUtente(model);
-        return "redirect:/registi";
+        return "redirect:/admin/registi";
     }
 
     @GetMapping("/admin/registi/{id}/edit")
@@ -65,13 +72,13 @@ public class RegistaController {
     public String aggiornaRegista(@PathVariable Long id ,@ModelAttribute Regista regista,Model model){ //@PathVariable prende il valore dall'url, @ModelAttribute Regista regista contiene i nuovi valori inseriti nel form
         registaService.updateRegista(id,regista);
         aggiungiDatiUtente(model);
-        return "redirect:/registi/"+id; //redirect si usa con i post, perché ricarica la pagina (quindi fa si che siano presenti i nuovi valori)
+        return "redirect:/admin/registi"; //redirect si usa con i post, perché ricarica la pagina (quindi fa si che siano presenti i nuovi valori)
     }
 
     @PostMapping("/admin/registi/{id}/delete")
     public String eliminaRegista(@PathVariable Long id){
         registaService.deleteRegista(id);
-        return "redirect:/registi";
+        return "redirect:/admin/registi";
     }
 
 

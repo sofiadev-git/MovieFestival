@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Programmazione · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body>
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('programma')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Amministrazione / Programmazione')}">
+    </header>
+    <main class="page-content">
+     <header class="page-intro">
+      <div>
+       <p class="eyebrow">
+        AMMINISTRAZIONE / PROGRAMMAZIONE
+       </p>
+       <h1 class="intro-title">
+        Il programma, festival per festival.
+       </h1>
+       <p class="intro-lead">
+        Scegli un festival per associare i film e gestire le relative proiezioni.
+       </p>
+      </div>
+     </header>
+     <div class="catalog-tools">
+      <input aria-label="Cerca festival" data-filter-input="" data-filter-target="[data-search]" placeholder="Cerca festival o città..." type="search"/>
+     </div>
+     <div class="festival-grid">
+      <article class="festival-tile" th:attr="data-search=|${festival.nome} ${festival.citta} ${festival.anno}|" th:each="festival : ${festivals}">
+       <a class="festival-photo" th:href="@{/admin/festivals/{id}/proiezioni(id=${festival.id})}">
+        <img alt="Atmosfera cinematografica" th:src="@{/images/moviola-editoriale/festival-torino.webp}"/>
+        <span class="year-label" th:text="${festival.anno}">
+        </span>
+       </a>
+       <div class="festival-body">
+        <span class="festival-place" th:text="${festival.citta}">
+        </span>
+        <h3 th:text="${festival.nome}">
+         Festival
+        </h3>
+        <p>
+         Associa film e imposta date, orari, sale e stato delle proiezioni.
+        </p>
+        <div class="festival-footer">
+         <span th:text="|${#temporals.format(festival.dataInizio,'dd/MM/yyyy')} — ${#temporals.format(festival.dataFine,'dd/MM/yyyy')}|">
+         </span>
+         <a class="button small primary" th:href="@{/admin/festivals/{id}/proiezioni(id=${festival.id})}">
+          Gestisci →
+         </a>
+        </div>
+       </div>
+      </article>
+     </div>
+     <p class="empty no-results" data-filter-empty="">
+      Nessun festival trovato.
+     </p>
+     <p class="empty" th:if="${#lists.isEmpty(festivals)}">
+      Nessun festival disponibile.
+     </p>
+     <footer th:replace="~{fragments/shell :: footer}">
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
+</html>
+

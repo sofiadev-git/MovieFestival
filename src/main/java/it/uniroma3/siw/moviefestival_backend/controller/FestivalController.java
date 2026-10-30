@@ -2,6 +2,9 @@ package it.uniroma3.siw.moviefestival_backend.controller;
 
 import it.uniroma3.siw.moviefestival_backend.model.Festival;
 import it.uniroma3.siw.moviefestival_backend.service.FestivalService;
+import it.uniroma3.siw.moviefestival_backend.service.FilmService;
+import it.uniroma3.siw.moviefestival_backend.service.RegistaService;
+import it.uniroma3.siw.moviefestival_backend.service.SalaService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,23 +22,48 @@ import static it.uniroma3.siw.moviefestival_backend.model.Utente.ADMIN_ROLE;
 public class FestivalController {
 
     private final FestivalService festivalService;
+    private final FilmService filmService;
+    private final RegistaService registaService;
+    private final SalaService salaService;
 
-    public FestivalController(FestivalService festivalService) {
+    public FestivalController(FestivalService festivalService, FilmService filmService, RegistaService registaService, SalaService salaService) {
         this.festivalService = festivalService;
+        this.filmService = filmService;
+        this.registaService = registaService;
+        this.salaService = salaService;
     }
 
-    @GetMapping({"/", "/festivals"})
+    @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("festivals", festivalService.getAllFestivals());
+        model.addAttribute("totalFilms", filmService.getAllFilms().size());
+        model.addAttribute("featuredFilms", filmService.getAllFilms().stream().limit(4).toList());
         aggiungiDatiUtente(model);
-
         return "paginaListaFestival";
+    }
+
+    @GetMapping("/festivals")
+    public String catalogoFestival(Model model) {
+        model.addAttribute("festivals", festivalService.getAllFestivals());
+        aggiungiDatiUtente(model);
+        return "paginaCatalogoFestival";
     }
 
     @GetMapping("/admin")
     public String admin(Model model) {
+        model.addAttribute("festivalCount", festivalService.getAllFestivals().size());
+        model.addAttribute("filmCount", filmService.getAllFilms().size());
+        model.addAttribute("registaCount", registaService.getAllRegisti().size());
+        model.addAttribute("salaCount", salaService.getAllSale().size());
         aggiungiDatiUtente(model);
         return "admin";
+    }
+
+    @GetMapping("/admin/festivals")
+    public String gestisciFestival(Model model) {
+        model.addAttribute("festivals", festivalService.getAllFestivals());
+        aggiungiDatiUtente(model);
+        return "admin/paginaListaFestival";
     }
 
     @GetMapping("/admin/festivals/nuovo")
@@ -49,7 +77,7 @@ public class FestivalController {
     @PostMapping("/admin/festivals")
     public String creaFestival(@ModelAttribute Festival festival) {
         Festival nuovoFestival = festivalService.createFestival(festival);
-        return "redirect:/admin/festivals/" + nuovoFestival.getId() + "/proiezioni";
+        return "redirect:/admin/festivals";
     }
 
     @GetMapping("/admin/festivals/{id}/edit")
@@ -63,7 +91,7 @@ public class FestivalController {
     @PostMapping("/admin/festivals/{id}")
     public String aggiornaFestival(@PathVariable Long id, @ModelAttribute Festival festival) {
         festivalService.updateFestival(id, festival);
-        return "redirect:/admin/festivals/" + id + "/proiezioni";
+        return "redirect:/admin/festivals";
     }
 
     @PostMapping("/admin/festivals/{festivalId}/films")
@@ -81,7 +109,7 @@ public class FestivalController {
     @PostMapping("/admin/festivals/{id}/delete")
     public String eliminaFestival(@PathVariable Long id) {
         festivalService.deleteFestival(id);
-        return "redirect:/festivals";
+        return "redirect:/admin/festivals";
     }
 
 

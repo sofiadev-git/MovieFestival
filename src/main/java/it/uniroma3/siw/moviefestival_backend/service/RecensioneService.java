@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class RecensioneService {
 
-    private static final int RECENSIONI_PER_PAGINA = 5;
+    private static final int RECENSIONI_PER_PAGINA = 4;
 
     @Autowired
     private RecensioneRepository recensioneRepository;

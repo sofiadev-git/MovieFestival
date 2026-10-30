@@ -1,238 +1,155 @@
 <!DOCTYPE html>
-<html lang="it"
-      xmlns:th="http://www.thymeleaf.org">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <title>
-        Area Admin - Movie Festival
-    </title>
-
-
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/admin.css}">
-</head>
-
-
-<body class="festival-page">
-
-
-<nav class="navbar">
-
-    <a class="navbar-brand"
-       th:href="@{/}">
-        Movie Festival
-    </a>
-
-
-    <div class="nav-links">
-
-        <a th:href="@{/festivals}">
-            Festival
-        </a>
-
-        <a th:href="@{/films}">
-            Film
-        </a>
-
-        <a th:href="@{/registi}">
-            Registi
-        </a>
-
-        <span class="nav-current">
-            Area Admin
-        </span>
-
-
-        <span class="nav-user"
-              th:if="${userDetails != null}"
-              th:text="${userDetails.username}">
-            username
-        </span>
-
-
-        <form th:action="@{/logout}"
-              method="post">
-
-            <button class="nav-button"
-                    type="submit">
-                Logout
-            </button>
-
-        </form>
-
-    </div>
-
-</nav>
-
-
-<main class="site-container">
-
-
-    <header class="section-header">
-
-        <div>
-
-            <p class="section-kicker">
-                AREA AMMINISTRATORE
-            </p>
-
-            <h1>
-                GESTIONE CONTENUTI
-            </h1>
-
-        </div>
-
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Amministrazione · Moviola
+  </title>
+  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+  <script defer="" th:src="@{/js/moviola.js}">
+  </script>
+ </head>
+ <body>
+  <div class="layout">
+   <aside th:replace="~{fragments/shell :: sidebar('dashboard')}">
+   </aside>
+   <div class="workspace">
+    <header th:replace="~{fragments/shell :: topbar('Amministrazione')}">
     </header>
-
-
-    <section class="admin-dashboard">
-
-
-        <!-- FESTIVAL -->
-
-        <article class="admin-card">
-
-            <span class="admin-card-number">
-                01
-            </span>
-
-            <h2>
-                Festival
-            </h2>
-
-            <p>
-                Consulta il catalogo pubblico oppure
-                crea un nuovo festival.
-            </p>
-
-            <div class="admin-card-actions">
-
-                <a class="button secondary"
-                   th:href="@{/festivals}">
-                    Visualizza festival
-                </a>
-
-                <a class="button accent"
-                   th:href="@{/admin/festivals/nuovo}">
-                    + Nuovo festival
-                </a>
-
-            </div>
-
-        </article>
-
-
-        <!-- FILM -->
-
-        <article class="admin-card">
-
-            <span class="admin-card-number">
-                02
-            </span>
-
-            <h2>
-                Film
-            </h2>
-
-            <p>
-                Consulta i film pubblici oppure
-                aggiungi un nuovo film al catalogo.
-            </p>
-
-            <div class="admin-card-actions">
-
-                <a class="button secondary"
-                   th:href="@{/films}">
-                    Visualizza film
-                </a>
-
-                <a class="button accent"
-                   th:href="@{/admin/films/nuovo}">
-                    + Nuovo film
-                </a>
-
-            </div>
-
-        </article>
-
-
-        <!-- REGISTI -->
-
-        <article class="admin-card">
-
-            <span class="admin-card-number">
-                03
-            </span>
-
-            <h2>
-                Registi
-            </h2>
-
-            <p>
-                Consulta le pagine pubbliche dei registi
-                oppure aggiungine uno.
-            </p>
-
-            <div class="admin-card-actions">
-
-                <a class="button secondary"
-                   th:href="@{/registi}">
-                    Visualizza registi
-                </a>
-
-                <a class="button accent"
-                   th:href="@{/admin/registi/nuovo}">
-                    + Nuovo regista
-                </a>
-
-            </div>
-
-        </article>
-
-
-        <!-- SALE -->
-
-        <article class="admin-card">
-
-            <span class="admin-card-number">
-                04
-            </span>
-
-            <h2>
-                Sale
-            </h2>
-
-            <p>
-                Gestisci le sale utilizzate
-                per le proiezioni dei festival.
-            </p>
-
-            <div class="admin-card-actions">
-
-                <a class="button secondary"
-                   th:href="@{/admin/sale}">
-                    Visualizza sale
-                </a>
-
-                <a class="button accent"
-                   th:href="@{/admin/sale/nuova}">
-                    + Nuova sala
-                </a>
-
-            </div>
-
-        </article>
-
-
-    </section>
-
-</main>
-
-
-</body>
-
+    <main class="page-content">
+     <section class="dashboard-top">
+      <p class="eyebrow">
+       AREA RISERVATA
+      </p>
+      <h1>
+       Dietro le quinte.
+      </h1>
+      <p>
+       Gestisci il catalogo e la programmazione cinematografica, a partire dagli elenchi.
+      </p>
+     </section>
+     <div class="dashboard-stats">
+      <div class="stat-box">
+       <b th:text="${festivalCount}">
+        0
+       </b>
+       <span>
+        Festival
+       </span>
+      </div>
+      <div class="stat-box">
+       <b th:text="${filmCount}">
+        0
+       </b>
+       <span>
+        Film
+       </span>
+      </div>
+      <div class="stat-box">
+       <b th:text="${registaCount}">
+        0
+       </b>
+       <span>
+        Registi
+       </span>
+      </div>
+      <div class="stat-box">
+       <b th:text="${salaCount}">
+        0
+       </b>
+       <span>
+        Sale
+       </span>
+      </div>
+     </div>
+     <div class="section-head">
+      <div>
+       <p class="eyebrow">
+        GESTIONE CONTENUTI
+       </p>
+       <h2>
+        Da dove vuoi iniziare?
+       </h2>
+      </div>
+     </div>
+     <div class="admin-grid">
+      <article class="admin-card">
+       <p class="eyebrow">
+        01 / FESTIVAL
+       </p>
+       <h3>
+        Festival
+       </h3>
+       <p>
+        Consulta le edizioni, modifica i dati e gestisci i film associati.
+       </p>
+       <a class="text-link" th:href="@{/admin/festivals}">
+        Apri la lista festival →
+       </a>
+      </article>
+      <article class="admin-card">
+       <p class="eyebrow">
+        02 / CATALOGO
+       </p>
+       <h3>
+        Film
+       </h3>
+       <p>
+        Visualizza i titoli, gestisci locandine, registi e schede.
+       </p>
+       <a class="text-link" th:href="@{/admin/films}">
+        Apri la lista film →
+       </a>
+      </article>
+      <article class="admin-card">
+       <p class="eyebrow">
+        03 / AUTORI
+       </p>
+       <h3>
+        Registi
+       </h3>
+       <p>
+        Consulta le schede dei registi e modifica i dati anagrafici.
+       </p>
+       <a class="text-link" th:href="@{/admin/registi}">
+        Apri la lista registi →
+       </a>
+      </article>
+      <article class="admin-card">
+       <p class="eyebrow">
+        04 / LUOGHI
+       </p>
+       <h3>
+        Sale
+       </h3>
+       <p>
+        Consulta le sale a disposizione dei festival e le loro capienze.
+       </p>
+       <a class="text-link" th:href="@{/admin/sale}">
+        Apri la lista sale →
+       </a>
+      </article>
+      <article class="admin-card">
+       <p class="eyebrow">
+        05 / PROIEZIONI
+       </p>
+       <h3>
+        Programmazione
+       </h3>
+       <p>
+        Seleziona un festival, associa i film e definisci le proiezioni.
+       </p>
+       <a class="text-link" th:href="@{/admin/programmazione}">
+        Gestisci la programmazione →
+       </a>
+      </article>
+     </div>
+     <footer th:replace="~{fragments/shell :: footer}">
+     </footer>
+    </main>
+   </div>
+  </div>
+ </body>
 </html>
+
