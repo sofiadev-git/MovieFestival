@@ -5,6 +5,7 @@ import it.uniroma3.siw.moviefestival_backend.model.Proiezione;
 import it.uniroma3.siw.moviefestival_backend.service.FestivalService;
 import it.uniroma3.siw.moviefestival_backend.service.ProiezioneService;
 import it.uniroma3.siw.moviefestival_backend.service.SalaService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Controller
 public class ProiezioneController {
@@ -24,6 +30,20 @@ public class ProiezioneController {
         this.proiezioneService = proiezioneService;
         this.festivalService = festivalService;
         this.salaService = salaService;
+    }
+
+
+    @GetMapping("/proiezioni")
+    public String paginaProiezioni(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data, Model model) {
+        LocalDate oggi = LocalDate.now(ZoneId.of("Europe/Rome"));
+        LocalDate dataSelezionata = data != null ? data : oggi;
+
+        model.addAttribute("oggi", oggi);
+        model.addAttribute("dataSelezionata", dataSelezionata);
+        model.addAttribute("dataFormattata", dataSelezionata.format(DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.ITALIAN)));
+        model.addAttribute("proiezioni", proiezioneService.getProiezioniPerData(dataSelezionata));
+
+        return "paginaListaProiezioni";
     }
 
 

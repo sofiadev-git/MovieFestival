@@ -7,6 +7,7 @@
         <a class="nav-link" th:classappend="${active == 'home'} ? ' active' : ''" th:href="@{/}">⌂ &nbsp; Home</a>
         <a class="nav-link" th:classappend="${active == 'festivals'} ? ' active' : ''" th:href="@{/festivals}">▤ &nbsp; Festival</a>
         <a class="nav-link" th:classappend="${active == 'films'} ? ' active' : ''" th:href="@{/films}">▣ &nbsp; Film</a>
+        <a class="nav-link" th:classappend="${active == 'proiezioni'} ? ' active' : ''" th:href="@{/proiezioni}">◷ &nbsp; Proiezioni</a>
         <a class="nav-link" th:classappend="${active == 'registi'} ? ' active' : ''" th:href="@{/registi}">◎ &nbsp; Registi</a>
     </nav>
     <div class="nav-divider" th:if="${navAdmin}"></div>

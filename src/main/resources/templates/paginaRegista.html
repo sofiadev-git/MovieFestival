@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
  <head>
+  <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico(v=3)}">
   <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
   <title th:text="|Regista · Moviola|">
@@ -18,10 +19,7 @@
     <header th:replace="~{fragments/shell :: topbar('Registi / Dettaglio')}">
     </header>
     <main class="page-content">
-     <section class="detail-hero" style="grid-template-columns:180px 1fr">
-      <div class="avatar" style="width:170px;height:170px;border-radius:30px;font-size:66px">
-       ✦
-      </div>
+     <section class="regista-profile">
       <div>
        <p class="eyebrow">
         Regista · Profilo

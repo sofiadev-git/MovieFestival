@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico(v=3)}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Proiezioni · Moviola</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico(v=3)}">
+    <link rel="stylesheet" th:href="@{/css/moviola.css}">
+    <script defer th:src="@{/js/moviola.js}"></script>
+</head>
+<body>
+<div class="layout">
+    <aside th:replace="~{fragments/shell :: sidebar('proiezioni')}"></aside>
+    <div class="workspace">
+        <header th:replace="~{fragments/shell :: topbar('Proiezioni')}"></header>
+        <main class="page-content">
+            <header class="page-heading">
+                <div>
+                    <p class="eyebrow">PROGRAMMAZIONE CINEMATOGRAFICA</p>
+                    <h1>Le proiezioni.</h1>
+                    <p class="intro">Scopri i film in programma nei festival, con orari e sale. Seleziona una data per consultare le altre giornate.</p>
+                </div>
+            </header>
+
+            <form class="daily-date-filter" th:action="@{/proiezioni}" method="get" role="search">
+                <div class="daily-date-field">
+                    <label for="data">Seleziona una data</label>
+                    <input id="data" name="data" type="date" th:value="${dataSelezionata}" required>
+                </div>
+                <button class="btn red" type="submit">Cerca proiezioni</button>
+                <a class="btn" th:href="@{/proiezioni}" th:unless="${dataSelezionata.equals(oggi)}">Torna a oggi</a>
+            </form>
+
+            <section class="daily-programme" aria-labelledby="daily-programme-heading">
+                <div class="daily-programme-header">
+                    <div>
+                        <p class="eyebrow" th:text="${dataSelezionata.equals(oggi)} ? 'OGGI AL CINEMA' : 'PROGRAMMAZIONE DEL GIORNO'">PROGRAMMAZIONE DEL GIORNO</p>
+                        <h2 id="daily-programme-heading" th:text="${dataFormattata}">giovedì 5 novembre 2026</h2>
+                    </div>
+                    <span class="daily-programme-count" th:text="|${#lists.size(proiezioni)} proiezioni|">0 proiezioni</span>
+                </div>
+
+                <div class="daily-screening-list" th:unless="${#lists.isEmpty(proiezioni)}">
+                    <article class="daily-screening" th:each="proiezione : ${proiezioni}" th:classappend="${proiezione.stato.name() == 'CANCELLED'} ? ' daily-screening--cancelled' : ''">
+                        <time class="daily-screening-time" th:datetime="${proiezione.ora}" th:text="${#temporals.format(proiezione.ora, 'HH:mm')}">20:30</time>
+                        <a class="daily-screening-poster" th:href="@{/films/{id}(id=${proiezione.film.id})}" th:aria-label="|Dettagli film: ${proiezione.film.titolo}|">
+                            <img th:if="${proiezione.film.locandina != null and !proiezione.film.locandina.isBlank()}" th:src="${proiezione.film.locandina}" th:alt="|Locandina di ${proiezione.film.titolo}|" loading="lazy">
+                            <span th:unless="${proiezione.film.locandina != null and !proiezione.film.locandina.isBlank()}" aria-hidden="true">M.</span>
+                        </a>
+                        <div class="daily-screening-details">
+                            <h3 class="daily-screening-title"><a th:href="@{/films/{id}(id=${proiezione.film.id})}" th:text="${proiezione.film.titolo}">Titolo del film</a></h3>
+                            <a class="daily-screening-festival" th:href="|http://localhost:5173/festivals/${proiezione.festival.id}|" th:text="${proiezione.festival.nome}">Festival</a>
+                            <p th:text="${proiezione.sala != null ? proiezione.sala.nome : 'Sala da definire'}">Sala</p>
+                        </div>
+                        <span class="daily-screening-status" th:if="${proiezione.stato.name() == 'SCHEDULED'}">In programma</span>
+                        <span class="daily-screening-status daily-screening-status--cancelled" th:if="${proiezione.stato.name() == 'CANCELLED'}">Annullata</span>
+                        <span class="daily-screening-status daily-screening-status--completed" th:if="${proiezione.stato.name() == 'COMPLETED'}">Conclusa</span>
+                    </article>
+                </div>
+
+                <div class="empty daily-programme-empty" th:if="${#lists.isEmpty(proiezioni)}">
+                    <strong>Nessuna proiezione per questa data.</strong>
+                    <span>Seleziona un altro giorno dal calendario per consultare la programmazione.</span>
+                </div>
+            </section>
+            <footer th:replace="~{fragments/shell :: footer}"></footer>
+        </main>
+    </div>
+</div>
+</body>
+</html>

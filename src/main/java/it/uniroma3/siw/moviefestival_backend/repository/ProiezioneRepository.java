@@ -12,6 +12,10 @@ import java.util.Optional;
 @Repository
 public interface ProiezioneRepository extends JpaRepository<Proiezione, Long> {
 
+    // Carica film, festival e sala per mostrare la programmazione pubblica di un giorno.
+    @EntityGraph(attributePaths = {"film", "festival", "sala"})
+    List<Proiezione> findByDataOrderByOraAscIdAsc(LocalDate data);
+
     // Trova tutte le proiezioni di un festival ordinate per data e ora
     @EntityGraph(attributePaths = {"film", "sala"})  //costituisce lazy con EntithyGRaph
     List<Proiezione> findByFestival_IdOrderByDataAscOraAsc(Long festivalId);

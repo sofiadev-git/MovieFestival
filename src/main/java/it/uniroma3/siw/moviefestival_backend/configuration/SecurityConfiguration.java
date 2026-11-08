@@ -50,6 +50,7 @@ public class SecurityConfiguration {
                     "/films/**",
                     "/registi",
                     "/registi/**",
+                    "/proiezioni",
                     "/register",
                     "/api/festivals/**",
                     "/css/**",

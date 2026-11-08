@@ -38,6 +38,12 @@ public class ProiezioneService {
 
 
     @Transactional(readOnly = true)
+    public List<Proiezione> getProiezioniPerData(LocalDate data) {
+        return proiezioneRepository.findByDataOrderByOraAscIdAsc(data);
+    }
+
+
+    @Transactional(readOnly = true)
     public List<Proiezione> getProiezioniFestival(Long festivalId) {
 
         festivalService.getFestival(festivalId);

@@ -1,108 +1,118 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <title th:text="|Film · Moviola|">
-   Film · Moviola
-  </title>
-  <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
-  <script defer="" th:src="@{/js/moviola.js}">
-  </script>
- </head>
- <body>
-  <div class="layout">
-   <aside th:replace="~{fragments/shell :: sidebar('films')}">
-   </aside>
-   <div class="workspace">
-    <header th:replace="~{fragments/shell :: topbar('Catalogo / Film')}">
-    </header>
-    <main class="page-content">
-     <header class="page-heading">
-      <div>
-       <p class="eyebrow">
-        Il nostro catalogo
-       </p>
-       <h1 class="serif">
-        Le storie sullo schermo.
-       </h1>
-       <p class="intro">
-        Tutti i film, i generi e i registi del nostro archivio cinematografico.
-       </p>
-      </div>
-      <a class="button primary" th:href="@{/admin/films/nuovo}" th:if="${navAdmin}">
-       + Aggiungi film
-      </a>
-     </header>
-     <div class="catalog-controls">
-      <input aria-label="Cerca film" class="search-field" data-filter-input="" placeholder="Cerca per titolo, genere, anno o regista…" type="search"/>
-      <span class="count-tag" th:text="|${#lists.size(films)} titoli|">
+<head>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico(v=3)}">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title th:text="|Film · Moviola|">
+        Film · Moviola
+    </title>
+    <link rel="stylesheet" th:href="@{/css/moviola.css}"/>
+    <script defer="" th:src="@{/js/moviola.js}">
+    </script>
+</head>
+<body>
+<div class="layout">
+    <aside th:replace="~{fragments/shell :: sidebar('films')}">
+    </aside>
+    <div class="workspace">
+        <header th:replace="~{fragments/shell :: topbar('Catalogo / Film')}">
+        </header>
+        <main class="page-content">
+            <header class="page-heading">
+                <div>
+                    <p class="eyebrow">
+                        Il nostro catalogo
+                    </p>
+                    <h1 class="serif">
+                        Le storie sullo schermo.
+                    </h1>
+                    <p class="intro">
+                        Tutti i film, i generi e i registi del nostro archivio cinematografico.
+                    </p>
+                </div>
+                <a class="button primary" th:href="@{/admin/films/nuovo}" th:if="${navAdmin}">
+                    + Aggiungi film
+                </a>
+            </header>
+            <div class="catalog-controls">
+                <input aria-label="Cerca film" class="search-field" data-filter-input=""
+                       placeholder="Cerca per titolo, genere, anno o regista…" type="search"/>
+                <span class="count-tag" th:text="|${#lists.size(films)} titoli|">
        Titoli
       </span>
-     </div>
-     <div class="poster-grid">
-      <article class="poster-card" th:attr="data-search=|${film.titolo} ${film.genere} ${film.anno} ${film.regista != null ? film.regista.nome : ''} ${film.regista != null ? film.regista.cognome : ''}|" th:each="film : ${films}">
-       <a th:href="@{/films/{id}(id=${film.id})}">
-        <div class="poster-art">
-         <img th:alt="|Locandina di ${film.titolo}|" th:if="${film.locandina != null and !film.locandina.isBlank()}" th:src="${film.locandina}"/>
-         <span class="poster-placeholder" th:if="${film.locandina == null or film.locandina.isBlank()}" th:text="${film.titolo}">
+            </div>
+            <div class="poster-grid">
+                <article class="poster-card"
+                         th:attr="data-search=|${film.titolo} ${film.genere} ${film.anno} ${film.regista != null ? film.regista.nome : ''} ${film.regista != null ? film.regista.cognome : ''}|"
+                         th:each="film : ${films}">
+                    <a th:href="@{/films/{id}(id=${film.id})}">
+                        <div class="poster-art">
+                            <img th:alt="|Locandina di ${film.titolo}|"
+                                 th:if="${film.locandina != null and !film.locandina.isBlank()}"
+                                 th:src="${film.locandina}"/>
+                            <span class="poster-placeholder"
+                                  th:if="${film.locandina == null or film.locandina.isBlank()}"
+                                  th:text="${film.titolo}">
           Cinema
          </span>
-        </div>
-       </a>
-       <div class="poster-meta">
-        <h3>
-         <a th:href="@{/films/{id}(id=${film.id})}" th:text="${film.titolo}">
-          Film
-         </a>
-        </h3>
-        <p>
+                        </div>
+                    </a>
+                    <div class="poster-meta">
+                        <h3>
+                            <a th:href="@{/films/{id}(id=${film.id})}" th:text="${film.titolo}">
+                                Film
+                            </a>
+                        </h3>
+                        <p>
          <span th:text="${film.genere}">
           Genere
          </span>
-         ·
-         <span th:text="${film.anno}">
+                            ·
+                            <span th:text="${film.anno}">
           Anno
          </span>
-         ·
-         <span th:text="${film.durata}">
+                            ·
+                            <span th:text="${film.durata}">
           Durata
          </span>
-         min
-        </p>
-        <p th:if="${film.regista != null}">
-         Regia ·
-         <a th:href="@{/registi/{id}(id=${film.regista.id})}" th:text="|${film.regista.nome} ${film.regista.cognome}|">
-          Regista
-         </a>
-        </p>
-        <div class="row-actions" th:if="${navAdmin}">
-         <a class="button small" th:href="@{/admin/films/{id}/edit(id=${film.id})}">
-          Modifica
-         </a>
-         <form data-confirm="Eliminare definitivamente questo film?" method="post" th:action="@{/admin/films/{id}/delete(id=${film.id})}">
-          <button class="button danger small">
-           Elimina
-          </button>
-         </form>
-        </div>
-       </div>
-      </article>
-     </div>
-     <div class="empty no-results" data-filter-empty="">
-      Nessun film trovato per questa ricerca.
-     </div>
-     <div class="empty" th:if="${#lists.isEmpty(films)}">
-      Non ci sono ancora film.
-      <a th:href="@{/admin/films/nuovo}" th:if="${navAdmin}">
-       Aggiungi il primo film.
-      </a>
-     </div>
-     <footer th:replace="~{fragments/shell :: footer}">
-     </footer>
-    </main>
-   </div>
-  </div>
- </body>
+                            min
+                        </p>
+                        <p th:if="${film.regista != null}">
+                            Regia ·
+                            <a th:href="@{/registi/{id}(id=${film.regista.id})}"
+                               th:text="|${film.regista.nome} ${film.regista.cognome}|">
+                                Regista
+                            </a>
+                        </p>
+                        <div class="row-actions" th:if="${navAdmin}">
+                            <a class="button small" th:href="@{/admin/films/{id}/edit(id=${film.id})}">
+                                Modifica
+                            </a>
+                            <form data-confirm="Eliminare definitivamente questo film?" method="post"
+                                  th:action="@{/admin/films/{id}/delete(id=${film.id})}">
+                                <button class="button danger small">
+                                    Elimina
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="empty no-results" data-filter-empty="">
+                Nessun film trovato per questa ricerca.
+            </div>
+            <div class="empty" th:if="${#lists.isEmpty(films)}">
+                Non ci sono ancora film.
+                <a th:href="@{/admin/films/nuovo}" th:if="${navAdmin}">
+                    Aggiungi il primo film.
+                </a>
+            </div>
+            <footer th:replace="~{fragments/shell :: footer}">
+            </footer>
+        </main>
+    </div>
+</div>
+</body>
 </html>
 

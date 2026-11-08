@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>it.uniroma3.siw</groupId>
-    <artifactId>MovieFestival_backend</artifactId>
+    <artifactId>Moviola</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>MovieFestival_backend</name>
     <description>MovieFestival_backend</description>
