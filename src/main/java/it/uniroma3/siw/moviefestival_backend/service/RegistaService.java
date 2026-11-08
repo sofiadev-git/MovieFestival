@@ -6,6 +6,10 @@ import it.uniroma3.siw.moviefestival_backend.model.Festival;
 import it.uniroma3.siw.moviefestival_backend.model.Regista;
 import it.uniroma3.siw.moviefestival_backend.repository.RegistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,12 @@ public class RegistaService {
 
     public List<Regista> getAllRegisti(){
         return registaRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Regista> getAllRegisti(int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Order.asc("cognome"), Sort.Order.asc("nome"), Sort.Order.asc("id")));
+        return registaRepository.findAll(pageable);
     }
 
     public Regista getRegista(Long id){

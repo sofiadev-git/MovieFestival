@@ -36,8 +36,12 @@ public class FilmController {
 
 
     @GetMapping("/films")
-    public String getFilms(Model model) {
-        model.addAttribute("films", filmService.getAllFilms());
+    public String getFilms(@RequestParam(defaultValue = "0") int page, Model model) {
+        if (page < 0) {
+            page = 0;
+        }
+
+        model.addAttribute("films", filmService.getAllFilms(page));
         aggiungiDatiUtente(model);
         return "paginaListaFilm";
     }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import static it.uniroma3.siw.moviefestival_backend.model.Utente.ADMIN_ROLE;
 
@@ -24,8 +25,12 @@ public class RegistaController {
     private RegistaService registaService;
 
     @GetMapping("/registi") //quindi ci porta a /admin/registi
-    public String getRegisti(Model model){
-        model.addAttribute("registi", registaService.getAllRegisti()) ;    //etichetta per html e il corrispondente nel database, con thymeleaf si potrà fare ${registi}
+    public String getRegisti(@RequestParam(defaultValue = "0") int page, Model model){
+        if (page < 0) {
+            page = 0;
+        }
+
+        model.addAttribute("registi", registaService.getAllRegisti(page)) ;    //etichetta per html e il corrispondente nel database, con thymeleaf si potrà fare ${registi}
         aggiungiDatiUtente(model);
         return "paginaListaRegisti";
     }

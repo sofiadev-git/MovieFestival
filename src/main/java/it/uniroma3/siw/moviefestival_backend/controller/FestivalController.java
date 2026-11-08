@@ -43,8 +43,12 @@ public class FestivalController {
     }
 
     @GetMapping("/festivals")
-    public String catalogoFestival(Model model) {
-        model.addAttribute("festivals", festivalService.getAllFestivals());
+    public String catalogoFestival(@RequestParam(defaultValue = "0") int page, Model model) {
+        if (page < 0) {
+            page = 0;
+        }
+
+        model.addAttribute("festivals", festivalService.getAllFestivals(page));
         aggiungiDatiUtente(model);
         return "paginaCatalogoFestival";
     }

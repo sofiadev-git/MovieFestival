@@ -33,13 +33,13 @@
       </div>
      </header>
      <div class="catalog-tools">
-      <input aria-label="Cerca festival" data-filter-input="" data-filter-target="[data-search]" placeholder="Cerca festival, città o anno…" type="search"/>
-      <span class="count" th:text="|${#lists.size(festivals)} festival|">
+      <input aria-label="Filtra questa pagina di festival" data-filter-input="" data-filter-target="[data-search]" placeholder="Filtra questa pagina per festival, città o anno…" type="search"/>
+      <span class="count" th:text="|${festivals.totalElements} festival|">
        Festival
       </span>
      </div>
      <div class="festival-grid">
-      <article class="festival-tile" th:attr="data-search=|${festival.nome} ${festival.citta} ${festival.anno}|" th:each="festival, stat : ${festivals}">
+      <article class="festival-tile" th:attr="data-search=|${festival.nome} ${festival.citta} ${festival.anno}|" th:each="festival, stat : ${festivals.content}">
        <a class="festival-photo" th:aria-label="|Dettagli festival: ${festival.nome}|" th:href="|http://localhost:5173/festivals/${festival.id}|">
         <img alt="Atmosfera di un festival cinematografico" loading="lazy" th:src="@{/images/moviola-editoriale/festival-roma.webp}"/>
         <span class="year-label" th:text="${festival.anno}">
@@ -76,8 +76,13 @@
      <div class="empty no-results" data-filter-empty="">
       Nessun festival corrisponde alla ricerca.
      </div>
-     <div class="empty" th:if="${#lists.isEmpty(festivals)}">
+     <div class="empty" th:if="${festivals.empty}">
       Non ci sono ancora festival.
+     </div>
+     <div class="pagination" th:if="${festivals.totalPages &gt; 1}">
+      <a class="button small" th:if="${festivals.hasPrevious()}" th:href="@{/festivals(page=${festivals.number - 1})}">← Precedente</a>
+      <span th:text="|Pagina ${festivals.number + 1} di ${festivals.totalPages}|">Pagina 1 di 2</span>
+      <a class="button small" th:if="${festivals.hasNext()}" th:href="@{/festivals(page=${festivals.number + 1})}">Successiva →</a>
      </div>
      <footer th:replace="~{fragments/shell :: footer}">
      </footer>

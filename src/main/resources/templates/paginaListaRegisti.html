@@ -36,13 +36,13 @@
       </a>
      </header>
      <div class="catalog-controls">
-      <input aria-label="Cerca registi" class="search-field" data-filter-input="" placeholder="Cerca un regista o una nazionalità…" type="search"/>
-      <span class="count-tag" th:text="|${#lists.size(registi)} registi|">
+      <input aria-label="Filtra questa pagina di registi" class="search-field" data-filter-input="" placeholder="Filtra questa pagina per regista o nazionalità…" type="search"/>
+      <span class="count-tag" th:text="|${registi.totalElements} registi|">
        Registi
       </span>
      </div>
      <div class="festival-grid">
-      <article class="festival-card" th:attr="data-search=|${regista.nome} ${regista.cognome} ${regista.nazionalita}|" th:each="regista : ${registi}">
+      <article class="festival-card" th:attr="data-search=|${regista.nome} ${regista.cognome} ${regista.nazionalita}|" th:each="regista : ${registi.content}">
        <a class="stretched" th:href="@{/registi/{id}(id=${regista.id})}">
        </a>
        <span class="eyeline" th:text="${regista.nazionalita}">
@@ -74,8 +74,13 @@
      <div class="empty no-results" data-filter-empty="">
       Nessun regista corrisponde alla ricerca.
      </div>
-     <div class="empty" th:if="${#lists.isEmpty(registi)}">
+     <div class="empty" th:if="${registi.empty}">
       Non ci sono ancora registi nel catalogo.
+     </div>
+     <div class="pagination" th:if="${registi.totalPages &gt; 1}">
+      <a class="button small" th:if="${registi.hasPrevious()}" th:href="@{/registi(page=${registi.number - 1})}">← Precedente</a>
+      <span th:text="|Pagina ${registi.number + 1} di ${registi.totalPages}|">Pagina 1 di 2</span>
+      <a class="button small" th:if="${registi.hasNext()}" th:href="@{/registi(page=${registi.number + 1})}">Successiva →</a>
      </div>
      <footer th:replace="~{fragments/shell :: footer}">
      </footer>

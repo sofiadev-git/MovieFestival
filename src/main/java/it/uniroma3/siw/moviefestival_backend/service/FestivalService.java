@@ -12,6 +12,10 @@ import it.uniroma3.siw.moviefestival_backend.repository.FestivalRepository;
 import it.uniroma3.siw.moviefestival_backend.repository.FilmRepository;
 import it.uniroma3.siw.moviefestival_backend.repository.ProiezioneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +38,12 @@ public class FestivalService {
     @Transactional(readOnly = true)
     public List<Festival> getAllFestivals(){
         return festivalRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Festival> getAllFestivals(int page) {
+        Pageable pageable = PageRequest.of(page, 4, Sort.by(Sort.Order.desc("dataInizio"), Sort.Order.asc("id")));
+        return festivalRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

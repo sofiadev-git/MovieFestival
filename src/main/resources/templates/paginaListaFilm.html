@@ -36,16 +36,16 @@
                 </a>
             </header>
             <div class="catalog-controls">
-                <input aria-label="Cerca film" class="search-field" data-filter-input=""
-                       placeholder="Cerca per titolo, genere, anno o regista…" type="search"/>
-                <span class="count-tag" th:text="|${#lists.size(films)} titoli|">
+                <input aria-label="Filtra questa pagina di film" class="search-field" data-filter-input=""
+                       placeholder="Filtra questa pagina per titolo, genere, anno o regista…" type="search"/>
+                <span class="count-tag" th:text="|${films.totalElements} titoli|">
        Titoli
       </span>
             </div>
             <div class="poster-grid">
                 <article class="poster-card"
                          th:attr="data-search=|${film.titolo} ${film.genere} ${film.anno} ${film.regista != null ? film.regista.nome : ''} ${film.regista != null ? film.regista.cognome : ''}|"
-                         th:each="film : ${films}">
+                         th:each="film : ${films.content}">
                     <a th:href="@{/films/{id}(id=${film.id})}">
                         <div class="poster-art">
                             <img th:alt="|Locandina di ${film.titolo}|"
@@ -102,11 +102,16 @@
             <div class="empty no-results" data-filter-empty="">
                 Nessun film trovato per questa ricerca.
             </div>
-            <div class="empty" th:if="${#lists.isEmpty(films)}">
+            <div class="empty" th:if="${films.empty}">
                 Non ci sono ancora film.
                 <a th:href="@{/admin/films/nuovo}" th:if="${navAdmin}">
                     Aggiungi il primo film.
                 </a>
+            </div>
+            <div class="pagination" th:if="${films.totalPages &gt; 1}">
+             <a class="button small" th:if="${films.hasPrevious()}" th:href="@{/films(page=${films.number - 1})}">← Precedente</a>
+             <span th:text="|Pagina ${films.number + 1} di ${films.totalPages}|">Pagina 1 di 2</span>
+             <a class="button small" th:if="${films.hasNext()}" th:href="@{/films(page=${films.number + 1})}">Successiva →</a>
             </div>
             <footer th:replace="~{fragments/shell :: footer}">
             </footer>
