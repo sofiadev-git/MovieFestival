@@ -35,6 +35,7 @@ public class FilmService {
         return filmRepository.findAll(pageable);
     }
 
+
     public Film getFilm(Long id) {
         return filmRepository.findById(id).orElseThrow(() -> new NotFoundException("film non trovato"));
     }
